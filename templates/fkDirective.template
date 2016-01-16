@@ -9,7 +9,7 @@
   	
 </div>
 <div class="col s4">
-	<a class='btn' href='#{{model}}' modal><i class="material-icons">search</i></a>
+	<a class='btn light-blue' href='#{{model}}' modal><i class="material-icons">search</i></a>
 </div>
 <!-- Modal Structure -->
 <div id="{{model}}" class="modal blue-grey lighten-5" style="overflow:visible;">
@@ -22,9 +22,9 @@
 						<label for="searchText" >Search Text</label>
 					</div>
 					<div class="input-field col s4 right-align">
-						<button class="waves-effect waves-light btn-flat" ng-click="(page = page-1 || 1)">Prev</button>
+						<button class="btn-flat" ng-click="(page = page-1 || 1)"><i class='material-icons light-blue-text center'>skip_previous</i></button>
 						| <b>{{page}}</b> |
-						<button class="waves-effect waves-light btn-flat" ng-click="page = page+1">Next</button>
+						<button class="btn-flat" ng-click="page = page+1"><i class='material-icons light-blue-text center'>skip_next</i></button>
 					</div>
 				</div>
 				<div class="row" style="height:250px;overflow:auto;"> 

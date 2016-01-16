@@ -1,5 +1,7 @@
-<h1>##appName## - ##modelNameTitle##</h1>
-<div class="container">
-	<div ##modelName##-form></div>
-	<!-- <div>{{##modelNameAs##.obj}}</div> -->
+<div>
+	<br><br>
+  	<div class="section">
+		<h1 class="header center orange-text">New ##modelNameTitle##</h1>
+		<div ##modelName##-form></div>
+	</div>
 </div>

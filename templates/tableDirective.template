@@ -6,9 +6,9 @@
 				<label for="searchText" >Search Text</label>
 			</div>
 			<div class="input-field col s4 right-align">
-				<button class="waves-effect waves-light btn-flat" ng-click="(page = page-1 || 1)">Prev</button>
+				<button class="btn-flat" ng-click="(page = page-1 || 1)"><i class='material-icons light-blue-text center'>skip_previous</i></button>
 				| <b>{{page}}</b> |
-				<button class="waves-effect waves-light btn-flat" ng-click="page = page+1">Next</button>
+				<button class="btn-flat" ng-click="page = page+1"><i class='material-icons light-blue-text center'>skip_next</i></button>
 			</div>
 		</div>
 		<div class="row">

@@ -65,9 +65,9 @@ var generateApp = function(models,url)
 		return "\
 		  <li><a class='dropdown-button' href='#/"+modelName+"' data-activates='dropdown_"+modelName+"' dropdown data-hover='true'>"+upcase(modelName)+"<i class='mdi-navigation-arrow-drop-down right'></i></a></li>\n\
 		  <ul id='dropdown_"+modelName+"' class='dropdown-content'>\n\
-		    <li><a href='/#/"+modelName+"'>Dash</a></li>\n\
-		    <li><a href='/#/"+modelName+"/all'>All</a></li>\n\
-		    <li><a href='/#/"+modelName+"/new'>New</a></li>\n\
+		    <li><a href='/#/"+modelName+"'><i class='material-icons light-blue-text center'>dashboard</i></a></li>\n\
+		    <li><a href='/#/"+modelName+"/all'><i class='material-icons light-blue-text center'>search</i></a></li>\n\
+		    <li><a href='/#/"+modelName+"/new'><i class='material-icons light-blue-text center'>add</i></a></li>\n\
 		  </ul>\n"
 	}
 

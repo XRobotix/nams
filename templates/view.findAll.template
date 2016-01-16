@@ -1,11 +1,9 @@
-<h1>##appName## - ##modelNameTitle##</h1>
-
-<!-- <div>
-	<p>{{##modelNameAs##.message}}</p>
-	<p>{{##modelNameAs##.searchText}}</p>
-	<p>{{##modelNameAs##.pageId}}</p>
-</div> -->   
-
-<div class="container">
-	<div table-view headings="##modelNameAs##.headings" data="##modelNameAs##.data" model="##modelNameAs##.model" search="##modelNameAs##.searchText" page="##modelNameAs##.pageId"></div>
+<div>
+	<br><br>
+  	<div class="section">
+		<h1 class="header center orange-text">Search ##modelNameTitle## Records</h1>  
+		<div class="container">
+			<div table-view headings="##modelNameAs##.headings" data="##modelNameAs##.data" model="##modelNameAs##.model" search="##modelNameAs##.searchText" page="##modelNameAs##.pageId"></div>
+		</div>
+	</div>
 </div>

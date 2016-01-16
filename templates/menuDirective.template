@@ -1,11 +1,11 @@
-<nav>
-  <a href="#/" class="brand-logo">##appName##</a>
+<nav class="light-blue lighten-1" style="position:fixed;top:0px;left:0px;right:0px;z-index:998;">
+  <a href="#/home" class="brand-logo">##appName##</a>
   <ul class="right hide-on-med-and-down">
     ##menuItems##
     <li><a class="dropdown-button" href="" data-activates="dropdown_profile" dropdown data-hover="true">Profile<i class="mdi-navigation-arrow-drop-down right"></i></a></li>
     <ul id='dropdown_profile' class='dropdown-content'>
-      <li><a href="#/login">Login</a></li>
-      <li><a href="#/logout">Logout</a></li>
+      <li><a href="#/login"><i class='material-icons light-blue-text center'>lock_open</i></a></li>
+      <li><a href="#/logout"><i class='material-icons light-blue-text center'>lock</i></a></li>
     </ul>
   </ul>
   <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>

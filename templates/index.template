@@ -31,7 +31,7 @@
   
   <div ng-view></div>
 
-  <footer class="page-footer orange">
+  <footer class="page-footer orange" style="position:fixed;bottom:0px;left:0px;right:0px;z-index:998;">
     <!-- <div class="container" ng-show="companyBio">
       <div class="row">
         <div class="col l6 s12">
