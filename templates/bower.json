@@ -1,0 +1,30 @@
+{
+  "name": "##appName##",
+  "authors": [
+    "Jaco Bezuidenhout <jaco@xrobotix.co.za>"
+  ],
+  "description": "A NAMS-Generated app",
+  "main": "app.js",
+  "moduleType": [],
+  "license": "GPLv3",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-animate": "^1.4.6",
+    "angular-base64-upload": "~0.1.13",
+    "angular-aria": "^1.4.6",
+    "angular-route": "1.2.x",
+    "angular-timeline": "~1.6.1",
+    "angular-mocks": "1.2.x",
+    "Materialize": "materialize#~0.97.5",
+    "angular-materialize": "~0.1.2",
+    "angular-datetime": "~2.1.0",
+    "angular-chart.js": "~0.8.8"
+  }
+}

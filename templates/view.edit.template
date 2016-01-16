@@ -1,0 +1,4 @@
+<h1>##appName## - ##modelNameTitle##</h1>
+<div class="container">
+	<div ##modelName##-form></div>
+</div>

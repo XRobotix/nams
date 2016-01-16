@@ -1,0 +1,51 @@
+<div class="section no-pad-bot" id="index-banner">
+  <div class="container">
+    <br><br>
+    <h1 class="header center orange-text">##modelNameTitle##</h1>
+<!--     <div class="row center">
+      <h5 class="header col s12 light">{{##modelNameAs##.message}}</h5>
+    </div> -->
+    <div class="row center">
+        <form class="col s12">
+          <div class="row">
+            <div class="input-field col s9">
+              <i class="material-icons prefix">search</i>
+              <input id="icon_prefix" type="text" ng-model="searchText" class="validate">
+              <label for="icon_prefix">Search Text</label>
+            </div>
+            <div class="input-field col s3">
+              <a href="#/##modelName##/all/{{searchText}}" class="btn-large waves-effect waves-light orange">Search</a>
+            </div>
+          </div>
+        </form>
+    </div>
+    <br><br>
+
+  </div>
+</div>
+<div class="container">
+  <div class="section">
+    <!--   Icon Section   -->
+    <div class="row">
+      <div class="col s12 m6 l3" ng-repeat="item in ##modelNameAs##.summary">
+          <div class="card">
+              <div class="card-content {{item.color}} white-text">
+                  <p class="card-stats-title"><i class="{{item.title}}"></i> {{item.title}}</p>
+                  <h4 class="card-stats-number">{{item.total}}</h4>
+                  <p class="card-stats-compare"><i class="mdi-hardware-keyboard-arrow-up"></i> 15% <span class="{{item.color}}-text text-lighten-5">from yesterday</span>
+                  </p>
+              </div>
+              <div class="card-action {{item.color}} darken-2" style="padding:1px;">
+                  <canvas id="bar" style="height:20px;" class="chart chart-bar" chart-data="item.data" chart-labels="item.labels" chart-series="item.series"></canvas>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <br><br>
+
+  <div class="section">
+
+  </div>
+</div>

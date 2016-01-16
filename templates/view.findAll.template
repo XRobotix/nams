@@ -1,0 +1,11 @@
+<h1>##appName## - ##modelNameTitle##</h1>
+
+<!-- <div>
+	<p>{{##modelNameAs##.message}}</p>
+	<p>{{##modelNameAs##.searchText}}</p>
+	<p>{{##modelNameAs##.pageId}}</p>
+</div> -->   
+
+<div class="container">
+	<div table-view headings="##modelNameAs##.headings" data="##modelNameAs##.data" model="##modelNameAs##.model" search="##modelNameAs##.searchText" page="##modelNameAs##.pageId"></div>
+</div>

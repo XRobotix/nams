@@ -1,0 +1,22 @@
+<div class="section no-pad-bot" id="index-banner">
+  <div class="container">
+    <br><br>
+    <h1 class="header center orange-text">Login</h1>
+    <div class="row center">
+      	Please Enter:<br /><br />
+		<div>
+		    <label for="user">Username:</label>
+		    <input type="text" ng-model="username" id="user"/>
+		</div>
+		<div>
+		    <label for="pass">Password:</label>
+		    <input type="password" ng-model="password" id="pass"/>
+		</div>
+		<div>
+		    <input type="button" ng-click="l.login(username,password,userip);" value="Login"/>
+		</div>
+    </div>
+    <br><br>
+
+  </div>
+</div>

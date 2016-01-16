@@ -1,0 +1,506 @@
+'use strict';
+
+angular.module('##appName##.##modelName##', ['ngRoute'])
+.config(['$routeProvider',function($routeprovider){
+	
+	$routeprovider.when('/##modelName##', {
+		controller: '##modelName##Controller as ##modelNameAs##',
+		templateUrl: './views/##modelName##View.html'
+	});
+
+	$routeprovider.when('/##modelName##/all', {
+		controller: '##modelName##Controller.findAll as ##modelNameAs##',
+		templateUrl: './views/##modelName##View.findAll.html'
+	});
+
+	$routeprovider.when('/##modelName##/all/:searchText', {
+		controller: '##modelName##Controller.findAll as ##modelNameAs##',
+		templateUrl: './views/##modelName##View.findAll.html'
+	});
+
+	$routeprovider.when('/##modelName##/all/:searchText/:pageId', {
+		controller: '##modelName##Controller.findAll as ##modelNameAs##',
+		templateUrl: './views/##modelName##View.findAll.html'
+	});
+	
+	$routeprovider.when('/##modelName##/new', {
+		controller: '##modelName##Controller.new as ##modelNameAs##',
+		templateUrl: './views/##modelName##View.new.html'
+	});
+
+	$routeprovider.when('/##modelName##/:##modelName##Id', {
+		controller: '##modelName##Controller.findOne as ##modelNameAs##',
+		templateUrl: './views/##modelName##View.findOne.html'
+	});
+
+	$routeprovider.when('/##modelName##/:##modelName##Id/edit', {
+		controller: '##modelName##Controller.edit as ##modelNameAs##',
+		templateUrl: './views/##modelName##View.edit.html'
+	});
+
+	$routeprovider.when('/##modelName##/:##modelName##Id/delete', {
+		controller: '##modelName##Controller.delete as ##modelNameAs##',
+		templateUrl: './views/##modelName##View.delete.html'
+	});
+
+}])
+.directive("##modelName##Form", function() {
+    return {
+        templateUrl : "views/directives/##modelName##Form.html"
+    };
+})
+.directive("##modelName##Record", function() {
+    return {
+    	scope: {
+    		##modelName## : "=##modelName##"
+    	},
+        templateUrl : "views/directives/##modelName##Record.html"
+    };
+})
+.directive("fk##modelName##EmbedRecord", function() {
+    return {
+    	scope: {
+    		##modelName## : "=##modelName##"
+    	},
+        templateUrl : "views/directives/##modelName##RecordEmbed.html"
+    };
+})
+.directive("fkm##modelName##MultipleEmbedRecord", function() {
+    return {
+    	scope: {
+    		data : "=data"
+    	},
+        templateUrl : "views/directives/##modelName##RecordMultipleEmbed.html"
+    };
+})
+##modelDirectives##
+.service('##modelName##Service', function($rootScope,$http) {
+    this.findOne = function(id,cb) {
+        $rootScope.loading = true;
+    	$http.get(URL + "/##modelName##/" + id)
+    	.then(function(r){
+			$rootScope.loading = false;
+			if (r.data.id)
+			{
+        		cb(r.data);
+			}
+			else
+			{
+				Materialize.toast("ERROR! ##modelName## #"+r.data.id+" findOne failed", 5000);
+        		cb({});
+			}
+    	},function(e){
+    		log(e);
+			$rootScope.loading = false;
+			Materialize.toast("ERROR! ##modelName## #"+r.data.id+" findOne failed", 5000);
+    	});
+    }
+
+    this.delete = function(obj,cb) {
+        $rootScope.loading = true;
+    	$http.get(URL + "/##modelName##/destroy/" + obj.id)
+    	.then(function(r){
+			$rootScope.loading = false;
+			if (r.data.id)
+			{
+				Materialize.toast("##modelName## #"+r.data.id+" successfully deleted", 2000);
+    			cb(r.data);
+			}
+			else
+			{
+				Materialize.toast("ERROR! ##modelName## #"+r.data.id+" delete failed", 5000);
+        		cb({});
+			}
+    	},function(e){
+    		log(e);
+			$rootScope.loading = false;
+			Materialize.toast("ERROR! ##modelName## #"+r.data.id+" delete failed", 5000);
+    	});
+
+    }
+
+    this.create = function(data,cb) {
+        $rootScope.loading = true;
+    	$http.post(URL + "/##modelName##/create",data)
+    	.then(function(r){
+			$rootScope.loading = false;
+			if (r.data.id)
+			{
+	    		Materialize.toast("##modelName## #"+r.data.id+" successfully created", 2000);
+	    		cb(r.data);
+			}
+			else
+			{
+				Materialize.toast("ERROR! ##modelName## #"+r.data.id+" create failed", 5000);
+        		cb({});
+			}
+    	},function(e){
+    		log(e);
+			$rootScope.loading = false;
+			Materialize.toast("ERROR! ##modelName## #"+r.data.id+" create failed", 5000);
+    	});
+    }
+
+    this.update = function(data,cb) {
+        $rootScope.loading = true;
+    	$http.post(URL + "/##modelName##/update/" + data.id,data)
+    	.then(function(r){
+			$rootScope.loading = false;
+			if (r.data.id)
+			{
+	    		Materialize.toast("##modelName## #"+r.data.id+" successfully saved", 2000);
+	    		cb(r.data);
+			}
+			else
+			{
+				Materialize.toast("ERROR! ##modelName## #"+r.data.id+" save failed", 5000);
+        		cb({});
+			}
+    	},function(e){
+    		log(e);
+			$rootScope.loading = false;
+			Materialize.toast("ERROR! ##modelName## #"+r.data.id+" save failed", 5000);
+    	});
+    }
+
+    this.findAll = function(headings,cb) {
+ 		$rootScope.loading = true;
+    	$http.get(URL + "/##modelName##/all")
+    	.then(function(r){
+			$rootScope.loading = false;
+			if (r.data.length)
+        	{
+        		cb(r.data);
+			}
+			else
+			{
+				Materialize.toast("ERROR! ##modelName## #"+r.data.id+" findAll failed", 5000);
+        		cb({});
+			}
+    	},function(e){
+    		log(e);
+			$rootScope.loading = false;
+			Materialize.toast("ERROR! ##modelName## #"+r.data.id+" findAll failed", 5000);
+    	})
+    }
+
+    this.find = function(headings,searchText,pageId,cb) {
+ 		$rootScope.loading = true;
+    	$http.get(URL + "/##modelName##/search?text="+ searchText + "&pageId=" + pageId)
+    	.then(function(r){
+			$rootScope.loading = false;
+			if (r.data.length)
+			{	
+        		cb(r.data);
+			}
+			else
+			{
+				Materialize.toast("ERROR! ##modelName## #"+r.data.id+" find failed", 5000);
+        		cb({});
+			}
+    	},function(e){
+    		log(e);
+			$rootScope.loading = false;
+			Materialize.toast("ERROR! ##modelName## #"+r.data.id+" find failed", 5000);
+    	})
+    }
+
+    this.getSummary = function(cb) {
+    	// cb([
+    	// 	{title:"New Patient Records",color:"green",icon:"mdi-social-group-add",total:596,labels:['2006', '2007', '2008', '2009', '2010', '2011', '2012'],series:['Series A', 'Series B'],data:[[65, 59, 80, 81, 56, 55, 40],[28, 48, 40, 19, 86, 27, 90]]},
+    	// 	{title:"New Patient Records",color:"blue",icon:"mdi-social-group-add",total:596,labels:['2006', '2007', '2008', '2009', '2010', '2011', '2012'],series:['Series A', 'Series B'],data:[[65, 59, 80, 81, 56, 55, 40],[28, 48, 40, 19, 86, 27, 90]]},
+    	// 	{title:"New Patient Records",color:"red",icon:"mdi-social-group-add",total:596,labels:['2006', '2007', '2008', '2009', '2010', '2011', '2012'],series:['Series A', 'Series B'],data:[[65, 59, 80, 81, 56, 55, 40],[28, 48, 40, 19, 86, 27, 90]]},
+    	// 	{title:"New Patient Records",color:"orange",icon:"mdi-social-group-add",total:596,labels:['2006', '2007', '2008', '2009', '2010', '2011', '2012'],series:['Series A', 'Series B'],data:[[65, 59, 80, 81, 56, 55, 40],[28, 48, 40, 19, 86, 27, 90]]},
+    	// 	{title:"New Patient Records",color:"teal",icon:"mdi-social-group-add",total:596,labels:['2006', '2007', '2008', '2009', '2010', '2011', '2012'],series:['Series A', 'Series B'],data:[[65, 59, 80, 81, 56, 55, 40],[28, 48, 40, 19, 86, 27, 90]]},
+    	// 	{title:"New Patient Records",color:"lime",icon:"mdi-social-group-add",total:596,labels:['2006', '2007', '2008', '2009', '2010', '2011', '2012'],series:['Series A', 'Series B'],data:[[65, 59, 80, 81, 56, 55, 40],[28, 48, 40, 19, 86, 27, 90]]},
+    	// 	{title:"New Patient Records",color:"amber",icon:"mdi-social-group-add",total:596,labels:['2006', '2007', '2008', '2009', '2010', '2011', '2012'],series:['Series A', 'Series B'],data:[[65, 59, 80, 81, 56, 55, 40],[28, 48, 40, 19, 86, 27, 90]]},
+    	// 	{title:"New Patient Records",color:"brown",icon:"mdi-social-group-add",total:596,labels:['2006', '2007', '2008', '2009', '2010', '2011', '2012'],series:['Series A', 'Series B'],data:[[65, 59, 80, 81, 56, 55, 40],[28, 48, 40, 19, 86, 27, 90]]},
+    	// ]);
+ 		$rootScope.loading = true;
+    	$http.get(URL + "/##modelName##/summary")
+    	.then(function(r){
+			$rootScope.loading = false;
+			if (r.data.length)
+			{	
+        		cb(r.data);
+			}
+			else
+			{
+				Materialize.toast("ERROR! ##modelName## #"+r.data.id+" getSummary failed", 5000);
+        		cb({});
+			}
+    	},function(e){
+    		log(e);
+			$rootScope.loading = false;
+			Materialize.toast("ERROR! ##modelName## #"+r.data.id+" getSummary failed", 5000);
+    	})
+    }
+
+})
+.controller('##modelName##Controller', function($scope, $rootScope, $location, $http, $routeParams, ##modelName##Service) {
+
+	var self = this;
+
+	init();
+
+	function init(){
+		##modelName##Service.getSummary(function(data){
+			// $scope.$apply(function(){
+				self.summary = data;
+			// });
+		});
+	};
+
+})
+.controller('##modelName##Controller.findOne', function($scope, $rootScope, $location, $http, $routeParams, ##modelName##Service) {
+
+	var self = this;
+
+	init();
+
+	function init(){
+		self.##modelName##Id = $routeParams.##modelName##Id;
+		##modelName##Service.findOne(self.##modelName##Id,function(data){
+			// $scope.$apply(function(){
+				self.##modelName## = data;
+			// });
+		});
+	};
+
+	self.message = "Hello ##modelName##.findOne";
+
+})
+.controller('##modelName##Controller.findAll', function($scope, $rootScope, $location, $http, $routeParams, ##modelName##Service) {
+
+	var self = this;
+	self.message = "Hello ##modelName##.findAll";
+	self.model = "##modelName##";
+	self.headings = ##modelHeadings##;
+
+	// setTimeout(function(){
+		init();
+	// },2000);
+
+	function init(){
+		self.searchText = $routeParams.searchText || "#all#";
+		self.pageId = $routeParams.pageId || 1;
+
+		// if (self.searchText == "#all#")
+		// {
+			##modelName##Service.findAll(self.headings,function(data){
+				// $scope.$apply(function(){
+					self.data = data;
+				// });
+			});
+		// }
+		// else
+		// {
+		// 	##modelName##Service.find(self.headings,self.searchText,self.pageId,function(data){
+		// 			log(data);
+		// 		// $scope.$apply(function(){
+		// 			self.data = data;
+		// 		// });
+		// 	});
+		// }
+
+	};
+
+	self.create = function(obj,selected)
+	{
+		##modelName##Service.create(obj,function(data){
+			self.data.push(data);
+				log(selected);
+			if (selected)
+			{
+				selected.push(data);
+				log(selected);
+			}
+		});
+	}
+
+})
+.controller('##modelName##Controller.new', function($scope, $rootScope, $location, $http, $routeParams, ##modelName##Service, fileUpload) {
+
+	$scope.$on('$locationChangeStart', function( event ) {
+	    var answer = confirm("Are you sure you want to leave this page?")
+	    if (!answer) {
+	        event.preventDefault();
+	    }
+	});
+
+	var self = this;
+	self.obj = {};
+	
+	self.setReturnValue = function(model,obj)
+	{
+		log(["RETURN",model,obj]);
+		self.obj[model] = obj;
+	}
+
+	self.add = function(model,obj)
+	{
+		log(["ADD",model,obj]);
+		self.obj[model] = self.obj[model] || [];
+		
+		for (var i = self.obj[model].length - 1; i >= 0; i--) {
+			if (self.obj[model][i].id == obj.id)
+				return;
+		};
+		
+		self.obj[model].push(obj);
+	}
+
+	self.remove = function(model,obj)
+	{
+		log(["REMOVE",model,obj]);
+		for (var i = self.obj[model].length - 1; i >= 0; i--) {
+			if (self.obj[model][i].id == obj.id)
+			{
+				self.obj[model].splice(i,1);
+			}
+		};
+	}
+
+    self.uploadFiles = function(fieldName){
+       var files = self.files;
+       
+       console.log('file is ' );
+       console.dir(files);
+       
+       var uploadUrl = URL+"/##modelName##/upload";
+       fileUpload.uploadFileToUrl(files, uploadUrl, function(files){
+       		self.obj[fieldName] = self.obj[fieldName] || [];
+       		angular.extend(self.obj[fieldName], files);
+       		// self.obj[fieldName] = self.obj[fieldName].concat(files);
+       });
+    };
+
+	init();
+
+	function init(){
+
+	};
+
+	$scope.save = function()
+	{
+		log(self.obj);
+		##modelName##Service.create(self.obj,function(data){
+			$location.url('/##modelName##/' + data.id);
+			log(data);
+		});
+	}
+
+	self.message = "Hello ##modelName##.new";
+
+})
+.controller('##modelName##Controller.edit', function($scope, $rootScope, $location, $http, $routeParams, ##modelName##Service, fileUpload) {
+
+	var saved = false;
+
+	$scope.$on('$locationChangeStart', function( event ) {
+	    if (!saved)
+	    {
+		    var answer = confirm("Are you sure you want to leave this page?")
+		    if (!answer) {
+		        event.preventDefault();
+		    }
+	    }
+	});
+
+	var self = this;
+	self.obj = {};
+	
+	self.setReturnValue = function(model,obj)
+	{
+		log(["RETURN",model,obj]);
+		self.obj[model] = obj;
+	}
+
+	self.add = function(model,obj)
+	{
+		log(["ADD",model,obj]);
+		self.obj[model] = self.obj[model] || [];
+		
+		for (var i = self.obj[model].length - 1; i >= 0; i--) {
+			if (self.obj[model][i].id == obj.id)
+				return;
+		};
+		
+		self.obj[model].push(obj);
+	}
+
+	self.remove = function(model,obj)
+	{
+		log(["REMOVE",model,obj]);
+		for (var i = self.obj[model].length - 1; i >= 0; i--) {
+			if (self.obj[model][i].id == obj.id)
+			{
+				self.obj[model].splice(i,1);
+			}
+		};
+	}
+
+    self.uploadFiles = function(fieldName){
+       var files = self.files;
+       
+       console.log('file is ' );
+       console.dir(files);
+       
+       var uploadUrl = URL+"/##modelName##/upload";
+       fileUpload.uploadFileToUrl(files, uploadUrl, function(files){
+       		self.obj[fieldName] = self.obj[fieldName] || [];
+       		self.obj[fieldName] = self.obj[fieldName].concat(files);
+       });
+    };
+
+	init();
+
+	function init(){
+		self.##modelName##Id = $routeParams.##modelName##Id;
+		##modelName##Service.findOne(self.##modelName##Id,function(data){
+			log(data);
+			// $scope.$apply(function(){
+				self.obj = data;
+			// });
+		});
+	};
+
+	$scope.save = function()
+	{
+		saved = true;
+		log(self.obj);
+		##modelName##Service.update(self.obj,function(data){
+			$location.url('/##modelName##/' + data.id);
+			log(data);
+		});
+	}
+
+	self.message = "Hello ##modelName##.new";
+
+
+})
+.controller('##modelName##Controller.delete', function($scope, $rootScope, $location, $http, $routeParams, ##modelName##Service) {
+
+	var self = this;
+	self.obj = {};
+
+	init();
+
+	function init(){
+		self.##modelName##Id = $routeParams.##modelName##Id;
+		##modelName##Service.findOne(self.##modelName##Id,function(data){
+			log(data);
+			// $scope.$apply(function(){
+				self.obj = data;
+			// });
+		});
+	};
+
+	$scope.delete = function()
+	{
+		##modelName##Service.delete(self.obj,function(data){
+			$location.url('/##modelName##/all');
+		});
+	}
+
+})

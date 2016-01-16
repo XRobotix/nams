@@ -1,0 +1,48 @@
+/**
+ * ##modelName##Controller
+ *
+ * @description :: Server-side logic for managing ##modelName##s
+ * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
+ */
+
+module.exports = {
+
+	login: function(req,res)
+	{
+		var values = req.allParams();
+		if (values.username && values.password && values.ip)
+		{
+			User.findOne({username:values.username,password:values.password})
+			.then(function(r){
+				if (r)
+				{
+					req.session.authenticated = true;
+					req.session.user = r;
+					res.json(r);
+				}
+				else
+				{
+					res.forbidden();
+				}
+					
+			},function(err){
+				res.forbidden(err);
+			})
+		}
+		else
+		{
+			res.forbidden();
+		}
+	},
+	logout: function(req,res)
+	{
+		req.session.authenticated = false;
+		delete req.session.user;
+		res.redirect("/");
+	},
+	find: function(req,res)
+	{
+		res.json(req.session.user);
+	}
+
+};

@@ -1,0 +1,36 @@
+<div class="row" ng-init="searchText=(search=='#all#' ? '' : search);page=(page||1)">
+	<div class="col s12">
+		<div class="row">
+			<div class="input-field col s8">
+				<input id="searchText" type="text" class="validate" ng-model="searchText">
+				<label for="searchText" >Search Text</label>
+			</div>
+			<div class="input-field col s4 right-align">
+				<button class="waves-effect waves-light btn-flat" ng-click="(page = page-1 || 1)">Prev</button>
+				| <b>{{page}}</b> |
+				<button class="waves-effect waves-light btn-flat" ng-click="page = page+1">Next</button>
+			</div>
+		</div>
+		<div class="row">
+			<table>
+				<thead>
+					<tr>
+						<th ng-repeat="heading in headings" ng-click="order=heading">{{heading}}</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr ng-repeat="item in data | filter:searchText | limitTo:10:((page-1)*10) | orderBy : order">
+						<td ng-repeat="(key,value) in item" ng-show="headings.indexOf(key) >= 0">{{value}}</td>
+						<td>
+						      <a href="#/{{model}}/{{item.id}}" class="btn-floating green"><i class="material-icons">search</i></a>
+						      <a href="#/{{model}}/{{item.id}}/edit" class="btn-floating yellow darken-1"><i class="material-icons">edit</i></a>
+						      <a href="#/{{model}}/{{item.id}}/delete" class="btn-floating red"><i class="material-icons">delete</i></a>
+						</td>	
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

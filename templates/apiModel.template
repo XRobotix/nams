@@ -1,0 +1,43 @@
+/**
+* ##modelName##.js
+*
+* @description :: TODO: You might write a short summary of how this model works and what it represents here.
+* @docs        :: http://sailsjs.org/#!documentation/models
+*/
+
+module.exports = {
+
+  attributes: {
+    ##modelAttributes##
+  },
+  afterCreate: function(obj,next)
+  {
+  if ("##modelName##" != "Log")
+  {
+    Log.create({model:"##modelName##",action:"created",recordId:obj.id});
+    next();
+  }     
+  },
+  beforeUpdate: function(obj,next)
+  {
+  Log.create({model:"##modelName##",action:"updated",recordId:obj.id,record:JSON.stringify(obj)})
+  .then(function(r){
+    console.log(r); 
+  },function(e){
+    console.log(e); 
+  });
+  next();
+  },
+  afterDestroy: function(obj,next)
+  {
+    console.log(obj);
+  Log.create({model:"##modelName##",action:"destroyed",recordId:obj[0].id,record:JSON.stringify(obj)})
+  .then(function(r){
+    console.log(r); 
+  },function(e){
+    console.log(e); 
+  });
+  next();
+  }
+
+};

@@ -1,0 +1,120 @@
+var URL = '##url##';
+var prod = true;
+var debug = true; 
+var useLogin = false;
+
+function log(obj) 
+{ 
+	if (debug) console.log(obj); 
+}
+
+var mainApp = angular.module('##appName##', ['ngRoute','naif.base64','ui.materialize','chart.js'##models##])
+.config(function($routeProvider, $locationProvider, $httpProvider) { 
+	$routeProvider.when('/', {
+		controller: 'homeController as h',
+		templateUrl: './views/homeView.html'
+	});
+
+	$routeProvider.otherwise({ redirectTo: useLogin ? '/login' : '/home'}); 
+})
+.run(function($http,$location,$rootScope){
+
+	init();
+
+	function init(){
+		// Materialize.toast("Changed to page ", 1000);
+		$http.get(URL + '/user')
+		.then(function(r){
+			console.log(r);
+			if (r.statusText == 'OK') 
+			{
+				$rootScope.user = r.data;
+				Materialize.toast("Login Successful ", 2000);
+			}
+			else
+			{
+				if (useLogin)
+				{
+					$location.url('/login');
+					Materialize.toast("Login Failed ", 5000);
+				}
+			}
+		},function(e){
+			console.log(e);
+			if (useLogin)
+			{
+				$location.url('/login');
+				Materialize.toast("ERROR! Login Failed ", 5000);
+			}
+		});
+	};
+})
+.directive("menu", function() {
+    return {
+        templateUrl : "views/directives/menuDirective.html"
+    };
+})
+.directive("tableView", function() {
+    return {
+        scope: {
+            "headings" : "=headings",
+            "data" : "=data",
+            "model" : "=model",
+            "search" : "=search",
+            "page" : "=page"
+    	},
+        templateUrl : "views/directives/tableDirective.html"
+    };
+})
+.directive('fileModel', ['$parse', function ($parse) {
+    return {
+       restrict: 'A',
+       link: function(scope, element, attrs) {
+          var model = $parse(attrs.fileModel);
+          var modelSetter = model.assign;
+          
+          element.bind('change', function(){
+             scope.$apply(function(){
+                modelSetter(scope, element[0].files);
+             });
+          });
+       }
+    };
+}])
+ .service('fileUpload', ['$http', function ($http) {
+    this.uploadFileToUrl = function(files, uploadUrl,cb){
+       var fd = new FormData();
+       for (var i = 0; i < files.length; i++) {
+       	  fd.append('files', files[i]);
+       };
+       
+       Materialize.toast("Upload started", 1000);
+       $http.post(uploadUrl, fd, {
+          transformRequest: angular.identity,
+          headers: {'Content-Type': undefined}
+       })
+    
+       .success(function(r){
+       		Materialize.toast(r.message, 2000);
+       		cb(r.files);
+       })
+    
+       .error(function(r){
+       		log(r);
+       		Materialize.toast("ERROR! File upload failed", 5000);
+       })
+    }
+}])
+.controller('homeController', function($scope, $rootScope, $location, $http, $routeParams) {
+
+	var self = this;
+
+	init();
+
+	function init(){
+		self.summary = [
+    		##summaryArray##
+    	];		
+	};
+
+})

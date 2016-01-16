@@ -1,0 +1,21 @@
+{
+  "name": "nams",
+  "version": "1.0.0",
+  "description": "node-angular-materialize-sails-generator",
+  "repository": "https://github.com/XRobotix/nams.git",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jaco Bezuidenhout (jaco@xrobotix.co.za)",
+  "license": "GPLv3",
+  "dependencies": {
+    "gulp": "^3.9.0",
+    "gulp-html-prettify": "0.0.1",
+    "gulp-install": "^0.6.0",
+    "gulp-js-prettify": "^0.1.0",
+    "gulp-serve": "^1.2.0",
+    "gulp-watch": "^4.3.5",
+    "ncp": "^2.0.0"
+  }
+}
