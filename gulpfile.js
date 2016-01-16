@@ -85,5 +85,7 @@ gulp.task('install', function() {
 
 ////////////////////////////////////////
 
-gulp.task('default',['install','generate','watch','bower','api','serve']);
+gulp.task('dev',['generate','api','serve','watch']);
+gulp.task('default',['generate','watch','bower','api','serve']);
+gulp.task('installAll',['install','generate','watch','bower','api','serve']);
 gulp.task('dist',['prettifyDist','serveDist']);

@@ -28,7 +28,7 @@
           <div class="card">
               <div class="card-content {{item.color}} white-text">
                   <p class="card-stats-title"><i class="{{item.title}}"></i> {{item.title}}</p>
-                  <h4 class="card-stats-number">{{item.total}}</h4>
+                  <h4 class="card-stats-number">{{h[item.model].total}}</h4>
                   <p class="card-stats-compare"><i class="mdi-hardware-keyboard-arrow-up"></i> 15% <span class="{{item.color}}-text text-lighten-5">from yesterday</span>
                   </p>
               </div>

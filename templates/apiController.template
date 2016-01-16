@@ -15,16 +15,31 @@ module.exports = {
 			res.forbidden();
 		});
 	},
+	dash: function(req,res)
+	{
+		##modelName##.find({})
+		.then(function(r){
+			res.json({total:(r.length||0)});	
+		},function(e){
+			res.forbidden();
+		});  
+	},
 	summary: function(req,res)
 	{
 		##modelName##.find({})
 		.then(function(r){
 			var summary = [];
-    		summary.push({title:"New ##modelName## Records", color:"green", icon:"mdi-social-group-add", total:r.length});
-			res.json(summary);	
+		    summary.push({title:"Total ##modelName## Records", color:"green", icon:"mdi-social-group-add", total:(r.length||0)} );
+				Log.find({model:"##modelName##"})
+				.then(function(lr){
+		    		summary.push({title:"Total ##modelName## Log Records", color:"orange", icon:"mdi-social-group-add", total:(lr.length||0)});
+					res.json(summary);	
+				},function(e){
+					res.forbidden();
+				});		
 		},function(e){
 			res.forbidden();
-		});
+		});  
 	},
 	search: function(req,res)
 	{

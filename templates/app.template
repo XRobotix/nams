@@ -81,7 +81,7 @@ var mainApp = angular.module('##appName##', ['ngRoute','naif.base64','ui.materia
        }
     };
 }])
- .service('fileUpload', ['$http', function ($http) {
+.service('fileUpload', ['$http', function ($http) {
     this.uploadFileToUrl = function(files, uploadUrl,cb){
        var fd = new FormData();
        for (var i = 0; i < files.length; i++) {
@@ -105,16 +105,42 @@ var mainApp = angular.module('##appName##', ['ngRoute','naif.base64','ui.materia
        })
     }
 }])
-.controller('homeController', function($scope, $rootScope, $location, $http, $routeParams) {
+.service('homeService', function($rootScope,$http) {
+    this.getDashData = function(model,cb) {
+      $http.get(URL + "/"+model+"/dash")
+      .then(function(r){
+        if (r.data)
+        {
+              cb(r.data);
+        }
+        else
+        {
+          Materialize.toast("No Data! "+model+" #"+r.data.id+" getDashData failed", 5000);
+              cb({});
+        }
+      },function(e){
+        log(e);
+        Materialize.toast("ERROR! "+model+" #"+r.data.id+" getDashData failed", 5000);
+      });
+    }
+})
+.controller('homeController', function($scope, $rootScope, $location, $http, $routeParams, homeService) {
 
 	var self = this;
+
+  var setDashData = function(model,data)
+  {
+    self[model] = data;
+  }
 
 	init();
 
 	function init(){
-		self.summary = [
-    		##summaryArray##
-    	];		
+
+		self.summary = [##summaryArray##];		
+    
+    ##summaryServices##
+
 	};
 
 })

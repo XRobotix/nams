@@ -58,6 +58,7 @@ var generateApp = function(models,url)
 		controllersInclude += "<script src='./controllers/loginController.js'></script>\n";
 	
 	var summaryArray = [];
+	var summaryServices = [];
 
 	var generateMenuDropdown = function(modelName)
 	{
@@ -76,7 +77,8 @@ var generateApp = function(models,url)
 			menuItems += generateMenuDropdown(models[i].name);
 		controllersInclude += "<script src='./controllers/" + models[i].name.toLowerCase() + "Controller.js'></script>\n";
 		generateController(models[i]);
-		summaryArray.push("{title:'" + upcase(models[i].name) + " Records',color:'" + (models[i].color ? models[i].color : "green") + "',icon:'mdi-social-group-add',total:596,model:'" + models[i].name + "'},");
+		summaryArray.push("{title:'" + upcase(models[i].name) + " Records',color:'" + (models[i].color ? models[i].color : "green") + "',icon:'mdi-social-group-add',model:'" + models[i].name + "'},");
+		summaryServices.push("homeService.getDashData('" + models[i].name + "',function(data){setDashData('" + models[i].name + "',data)});");
 	};
 
 	generateFromTempate("app","app.js","",
@@ -84,6 +86,7 @@ var generateApp = function(models,url)
 				{field:"appName",value:appName},
 				{field:"url",value:url},
 				{field:"summaryArray",value:summaryArray.join("\n")},
+				{field:"summaryServices",value:summaryServices.join("\n")},
 				{field:"models",value:modelsInclude}
 			]
 		);
