@@ -5,7 +5,7 @@ var URL = "";
 
 function log(obj)
 {	 
-	console.log(obj);
+	//console.log(obj);
 }
 
 function upcase(str)

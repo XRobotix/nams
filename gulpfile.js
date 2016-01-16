@@ -64,6 +64,8 @@ gulp.task('api',function(){
 	 if (err) {
 	   return console.error(err);
 	 }
+	 gulp.src(['./generated/' + config[0].name + '/server/package.json'])
+	 	.pipe(install());
 	 console.log('server_components copy done!');
 	});
 });
@@ -76,8 +78,11 @@ gulp.task('watch', function() {
 
 gulp.task('install', function() {
 	gulp.src(['./templates/bower.json', './package.json'])
-	  .pipe(install());
+	  .pipe(install(function(){
+	  	console.log("DONE");
+	  }));
 });
+
 ////////////////////////////////////////
 
 gulp.task('default',['install','generate','watch','bower','api','serve']);

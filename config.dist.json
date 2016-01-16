@@ -1,0 +1,23 @@
+[
+	{
+		"name": "sample",
+		"models": [
+			{"name":"post", "top": false, "color":"red", "fields":
+				[
+					{"name":"title", "group":"Post Details" ,"type":"text","top":true },
+					{"name":"description", "group":"Post Details" ,"type":"text","top":true },
+					{"name":"type", "group":"Post Details" ,"type":"select", "options":{"a":"A","note":"Note"}, "top":true },
+					{"name":"upload", "group":"Uploads" ,"type":"multiple","top":false }
+				]
+			},
+			{"name":"upload", "top": true, "color":"red", "fields":
+				[
+					{"name":"title", "group":"Upload Details" ,"type":"text","top":true },
+					{"name":"description", "group":"Upload Details" ,"type":"text","top":true },
+					{"name":"files", "group":"Upload Details" ,"type":"file","multiple":true,"top":false },
+					{"name":"post", "group":"Post" ,"type":"fk", "inlineCreate":true, "top":false }
+				]
+			}
+		]
+	}
+]
