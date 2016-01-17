@@ -1,4 +1,4 @@
-<div class="red lighten-5" id="index-banner">
+<div id="index-banner">
   <div class="section">
     <br><br>
     <h1 class="header center orange-text">##modelNameTitle##</h1>
@@ -8,13 +8,16 @@
     <div class="row center">
         <form class="col s12">
           <div class="row">
-            <div class="input-field col s9">
+            <div class="input-field col s10">
               <i class="material-icons prefix">search</i>
               <input id="icon_prefix" type="text" ng-model="searchText" class="validate">
               <label for="icon_prefix">Search Text</label>
             </div>
-            <div class="input-field col s3">
-              <a href="#/##modelName##/all/{{searchText}}" class="btn-large waves-effect waves-light orange">Search</a>
+            <div class="input-field col s1">
+              <a href="#/##modelName##/all/{{searchText}}" class="btn-large waves-effect waves-light orange right">Search</a>
+            </div>
+            <div class="input-field col s1">
+              <a href="#/##modelName##/new" class="btn-large waves-effect waves-light green left">New</a>
             </div>
           </div>
         </form>
@@ -22,7 +25,7 @@
     <br><br>
 
   </div>
-  <div class="section">
+  <div class="container">
     <!--   Icon Section   -->
     <div class="row">
       <div class="col s12 m6 l3" ng-repeat="item in ##modelNameAs##.summary">

@@ -12,7 +12,7 @@
 			</ul>
 		</div>
 		<div class="container">
-			<div ##modelName##-record ##modelName##="##modelNameAs##.##modelName##"></div>
+			<div ##modelName##-record ##modelName##="##modelNameAs##.##modelName##" fnl="getChartLabels" fnv="getChartValues"></div>
 		</div>
 	</div>
 </div>

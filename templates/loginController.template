@@ -8,6 +8,10 @@ angular.module('##appName##.login', ['ngRoute'])
 		controller: 'LoginController as l',
 		templateUrl: './views/loginView.html' 
 	});
+	$routeprovider.when('/logout', {
+		controller: 'LogoutController as l',
+		templateUrl: './views/loginView.html' 
+	});
 }])
 
 // Controller definition for this module
@@ -19,17 +23,7 @@ angular.module('##appName##.login', ['ngRoute'])
 		init();
 
 		function init(){
-			$http.get(URL + "/user")
-			.then(function(r){
-				log(r);
-				if (r.statusText == "OK") 
-				{
-					$rootScope.user = r.data;
-					// $location.url("/");
-				}
-			},function(e){
-				log(e);
-			});
+
 		};
 
 		this.login = function(username,password,ip){
@@ -39,10 +33,12 @@ angular.module('##appName##.login', ['ngRoute'])
 				if (r.statusText == "OK") 
 				{
 					$rootScope.user = r.data;
+					Materialize.toast("Login successful. Welcome #" + r.data.username, 5000);
 					$location.url("/");	
 				}
 			},function(e){
 				log(e);
+				Materialize.toast("ERROR! Login failed", 5000);
 			});
 		};
 
@@ -66,7 +62,7 @@ angular.module('##appName##.login', ['ngRoute'])
 		    	// or server returns response with an error status.
 		    	responseStatus = errorResponse.status;
 		    	log(JSON.stringify(errorResponse));
-
+		    	Materialize.toast("ERROR! Failed to get IP.", 5000);
 		    	// assigning userIp to scope
 		    	return $scope.userip = userIp;
 		    });
@@ -77,4 +73,24 @@ angular.module('##appName##.login', ['ngRoute'])
 		var filterTextTimeout = $timeout(function() {
 			loadUserIp();            
         }, 500); // delay 500 ms		
+})
+.controller('LogoutController', function($rootScope,$scope,$http,$timeout,$location) {
+
+		init();
+
+		function init(){
+			$http.get(URL + "/user/logout")
+			.then(function(r){
+				if (r.statusText == "OK") 
+				{
+					$rootScope.user = {};
+					Materialize.toast("Logout successful. Goodbey.", 5000);
+					$location.url("/login");
+				}
+			},function(e){
+				log(e);
+				Materialize.toast("ERROR! Logout failed", 5000);
+			});
+		};
+
 });

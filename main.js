@@ -5,7 +5,7 @@ var URL = "";
 
 function log(obj)
 {	 
-	//console.log(obj);
+	// console.log(obj);
 }
 
 function upcase(str)
@@ -403,7 +403,7 @@ var generateMultipleForm = function(model,name,create)
 			{field:"modelName",value:model}
 		]);
 
-	return "<div class='row' ng-controller='"+ model +"Controller.findAll as fkm_" + model[0] + "'><div multiple" + model + "" + name + "-form inline-create='"+create+"' create='fkm_"+model[0]+".create' headings='fkm_"+model[0]+".headings' selected='"+name[0]+".obj." + model + "' data='fkm_"+model[0]+".data' add='" + name[0] +  ".add" + "' remove='" + name[0] +  ".remove" + "' model='fkm_"+model[0]+".model'></div>\n</div>\n";
+	return "<div class='row' ng-controller='"+ model +"Controller.findAll as fkm_" + model[0] + "'><div multiple" + model + "" + name + "-form inline-create='"+create+"' save='save' create='fkm_"+model[0]+".create' headings='fkm_"+model[0]+".headings' selected='"+name[0]+".obj." + model + "' data='fkm_"+model[0]+".data' add='" + name[0] +  ".add" + "' remove='" + name[0] +  ".remove" + "' model='fkm_"+model[0]+".model'></div>\n</div>\n";
 }
 
 var generateFkForm = function(model,name,create)
@@ -415,7 +415,7 @@ var generateFkForm = function(model,name,create)
 			{field:"modelNameAs",value:model[0]}
 		]);
 
-	return "<div class='row' ng-controller='"+ model +"Controller.findAll as fk_" + model[0] + "'><div fk" + model + "" + name + "-form inline-create='"+create+"' create='fk_"+model[0]+".create' headings='fk_"+model[0]+".headings' data='fk_"+model[0]+".data' selected='"+name[0]+".obj." + model + "' ret='" + name[0] +  ".setReturnValue" + "' model='fk_"+model[0]+".model'></div>\n</div>\n";
+	return "<div class='row' ng-controller='"+ model +"Controller.findAll as fk_" + model[0] + "'><div fk" + model + "" + name + "-form inline-create='"+create+"' save='save' create='fk_"+model[0]+".create' headings='fk_"+model[0]+".headings' data='fk_"+model[0]+".data' selected='"+name[0]+".obj." + model + "' ret='" + name[0] +  ".setReturnValue" + "' model='fk_"+model[0]+".model'></div>\n</div>\n";
 }
 
 var generateRecordView = function(model,headings)
@@ -435,11 +435,13 @@ var generateRecordView = function(model,headings)
 	for (var i = 0; i < headings.length; i++) {
 		resME += "<td>"+headings[i]+"</td>";		
 	};
+	resME += "<td> </td>";		
 	resME += "</tr></thead>";
 	resME += "<tbody><tr ng-repeat='item in data'>";
 	for (var i = 0; i < headings.length; i++) {
 		resME += "<td>{{item['"+headings[i]+"']}}</td>";		
 	};
+	resME += "<td><a href='#/"+model.name+"/{{item.id}}'>View</a></td>";		
 	resME += "</tr></tbody></table>";
 	
 	resE += "<ul class='collapsible popout' data-collapsible='accordion'>";
@@ -456,6 +458,14 @@ var generateRecordView = function(model,headings)
 
 			switch(groups[key][i].type) {
 			    case "text":
+		  			res += "<p><b>" + groups[key][i].name + "</b>: {{" + model.name + "." + groups[key][i].name + "}}</p>\n";
+		  			resE += "<p><b>" + groups[key][i].name + "</b>: {{" + model.name + "." + groups[key][i].name + "}}</p>\n";
+			        break;
+			    case "calculated":
+		  			res += "<p><b>" + groups[key][i].name + "</b>: {{" + model.name + "." + groups[key][i].name + "}}</p>\n";
+		  			resE += "<p><b>" + groups[key][i].name + "</b>: {{" + model.name + "." + groups[key][i].name + "}}</p>\n";
+			        break;
+			    case "result":
 		  			res += "<p><b>" + groups[key][i].name + "</b>: {{" + model.name + "." + groups[key][i].name + "}}</p>\n";
 		  			resE += "<p><b>" + groups[key][i].name + "</b>: {{" + model.name + "." + groups[key][i].name + "}}</p>\n";
 			        break;
@@ -491,7 +501,13 @@ var generateRecordView = function(model,headings)
 			        break;
 			    case "multiple":
 		  			res += "<p><b>" + groups[key][i].name + "</b>:</p>\n";
-		  			res += "<div fkm" +groups[key][i].name+"-multiple-embed-record data='" + model.name + "." + groups[key][i].name + "'></div>\n";
+		  			if (groups[key][i].chart)
+		  			{
+		  				console.log(groups[key][i].name,groups[key][i].chart)
+		  				res += "<div fkm" +groups[key][i].name+"-multiple-embed-record data='" + model.name + "." + groups[key][i].name + "' chart='true' labels='fnl(" + model.name + "." + groups[key][i].name + ",\"" + groups[key][i].chart.label + "\")' values='fnv(" + model.name + "." + groups[key][i].name + ",\"" + groups[key][i].chart.value + "\")'></div>\n";
+		  			}
+		  			else
+		  				res += "<div fkm" +groups[key][i].name+"-multiple-embed-record data='" + model.name + "." + groups[key][i].name + "'></div>\n";
 			        break;
 			    case "radio":
 		  			res += "<p><b>" + groups[key][i].name + "</b>: {{" + model.name + "." + groups[key][i].name + "}}</p>\n";
@@ -559,6 +575,7 @@ var generateMultipleDirective = function(model,name)
 			            'model' : '=model',\n\
 			            'add' : '=add',\n\
 			            'remove' : '=remove',\n\
+			            'save' : '=save',\n\
 			            'selected' : '=selected'\n\
 			        },\n\
 			        templateUrl : 'views/directives/multiple" + model + "" + name + "Directive.html'//,\n\
@@ -587,6 +604,7 @@ var generateFkDirective = function(model,name)
 		            'data' : '=data',\n\
 		            'model' : '=model',\n\
 		            'ret' : '=ret',\n\
+			        'save' : '=save',\n\
 		            'selected' : '=selected'\n\
 		        },\n\
 		        templateUrl : 'views/directives/fk" + model + "" + name + "Directive.html',\n\

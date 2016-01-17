@@ -4,7 +4,7 @@
       ##formData##
     </div>
     <divclass="row>
-      <button class="btn waves-effect waves-light green" style="position:fixed;top:10%;right:24px;" type="button" ng-click="save()" name="action">{{ ##modelNameAs##.obj.id ? "Save" : "Create" }}
+      <button class="btn waves-effect waves-light green" style="position:fixed;top:10%;right:24px;" type="button" ng-click="save(true)" name="action">{{ ##modelNameAs##.obj.id ? "Save" : "Create" }}
         <i class="material-icons right">save</i>
       </button>
     </div>

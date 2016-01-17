@@ -1,7 +1,7 @@
 <div class="col s8" style="margin-top:10px;">
 	<!-- <input type="text" disabled ng-model="selected" > -->
 	<div ng-show="selected" class="chip">
-	    {{selected.name}}
+		<a href="#/{{model}}/{{selected.id}}"> {{ selected.name ? selected.name : "ID: " + selected.id}} </a>
   	</div>
 	<div ng-hide="selected" class="chip">
 	    None
@@ -45,7 +45,7 @@
 							<tr ng-repeat="item in data | filter:searchText | limitTo:5:((page-1)*5)">
 								<td ng-repeat="(key,value) in item" ng-show="headings.indexOf(key) >= 0">{{value}}</td>
 								<td>
-									<a href="" ng-click="ret(model,item)" class="modal-action modal-close waves-effect waves-green {{selected.id == item.id ? 'btn' : 'btn-flat'}}"><i class="material-icons">done</i></a>
+									<a href="" ng-click="ret(model,item)" class="waves-effect waves-green {{selected.id == item.id ? 'btn' : 'btn-flat'}}"><i class="material-icons">done</i></a>
 								</td>	
 							</tr>
 						</tbody>
@@ -55,6 +55,6 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<a href="" class=" modal-action modal-close waves-effect waves-green btn-flat">Done</a>
+		<a href="" class=" modal-action modal-close waves-effect waves-green btn-flat" ng-click="save()" >Done</a>
 	</div>
 </div>

@@ -42,7 +42,10 @@ module.exports = {
 	},
 	find: function(req,res)
 	{
-		res.json(req.session.user);
+		if (req.session.user)
+			res.json(req.session.user);
+		else
+			res.forbidden();
 	}
 
 };

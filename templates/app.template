@@ -15,7 +15,7 @@ var mainApp = angular.module('##appName##', ['ngRoute','naif.base64','ui.materia
 		templateUrl: './views/homeView.html'
 	});
 
-	$routeProvider.otherwise({ redirectTo: useLogin ? '/login' : '/home'}); 
+	$routeProvider.otherwise({ redirectTo: useLogin ? '/login' : '/'}); 
 })
 .run(function($http,$location,$rootScope){
 
@@ -35,16 +35,16 @@ var mainApp = angular.module('##appName##', ['ngRoute','naif.base64','ui.materia
 			{
 				if (useLogin)
 				{
-					$location.url('/login');
 					Materialize.toast("Login Failed ", 5000);
+          $location.url('/login');
 				}
 			}
 		},function(e){
 			console.log(e);
 			if (useLogin)
 			{
-				$location.url('/login');
 				Materialize.toast("ERROR! Login Failed ", 5000);
+        $location.url('/login');
 			}
 		});
 	};

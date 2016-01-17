@@ -52,7 +52,9 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 .directive("##modelName##Record", function() {
     return {
     	scope: {
-    		##modelName## : "=##modelName##"
+    		##modelName## : "=##modelName##",
+    		fnl : "=fnl",
+    		fnv : "=fnv"
     	},
         templateUrl : "views/directives/##modelName##Record.html"
     };
@@ -68,7 +70,10 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 .directive("fkm##modelName##MultipleEmbedRecord", function() {
     return {
     	scope: {
-    		data : "=data"
+    		data : "=data",
+    		labels : "=labels",
+    		chart : "=chart",
+    		values : "=values"
     	},
         templateUrl : "views/directives/##modelName##RecordMultipleEmbed.html"
     };
@@ -86,7 +91,7 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 			}
 			else
 			{
-				Materialize.toast("ERROR! ##modelName## #"+r.data.id+" findOne failed", 5000);
+				// Materialize.toast("ERROR! ##modelName## #"+r.data.id+" findOne failed", 5000);
         		cb({});
 			}
     	},function(e){
@@ -174,8 +179,8 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 			}
 			else
 			{
-				Materialize.toast("ERROR! ##modelName## #"+r.data.id+" findAll failed", 5000);
-        		cb({});
+				// Materialize.toast("ERROR! ##modelName## #"+r.data.id+" findAll failed", 5000);
+        		cb([]);
 			}
     	},function(e){
     		log(e);
@@ -227,7 +232,7 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 			else
 			{
 				Materialize.toast("ERROR! ##modelName## #"+r.data.id+" getSummary failed", 5000);
-        		cb({});
+        		cb([]);
 			}
     	},function(e){
     		log(e);
@@ -267,7 +272,25 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 		});
 	};
 
-	self.message = "Hello ##modelName##.findOne";
+	$scope.getChartLabels = function(obj,field)
+	{
+		var res = [];
+		for (var i = 0; i < obj.length; i++) {
+			res.push(obj[i][field].toString());
+		};
+		log(res);
+		return res;
+	}
+	$scope.getChartValues = function(obj,field)
+	{
+		var res = [];
+		for (var i = 0; i < obj.length; i++) {
+			res.push(parseInt(obj[i][field]));
+		};
+		log([res]);
+		return [res];
+	}
+
 
 })
 .controller('##modelName##Controller.findAll', function($scope, $rootScope, $location, $http, $routeParams, ##modelName##Service) {
@@ -321,10 +344,15 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 })
 .controller('##modelName##Controller.new', function($scope, $rootScope, $location, $http, $routeParams, ##modelName##Service, fileUpload) {
 
+	var saved = false;
+
 	$scope.$on('$locationChangeStart', function( event ) {
-	    var answer = confirm("Are you sure you want to leave this page?")
-	    if (!answer) {
-	        event.preventDefault();
+	    if (!saved)
+	    {
+		    var answer = confirm("Are you sure you want to leave this page?")
+		    if (!answer) {
+		        event.preventDefault();
+		    }
 	    }
 	});
 
@@ -381,13 +409,17 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 
 	};
 
-	$scope.save = function()
+	$scope.save = function(redirect)
 	{
 		log(self.obj);
-		##modelName##Service.create(self.obj,function(data){
-			$location.url('/##modelName##/' + data.id);
-			log(data);
-		});
+		if (redirect)
+		{
+			##modelName##Service.create(self.obj,function(data){
+				saved = true;
+				$location.url('/##modelName##/' + data.id);
+				log(data);
+			});
+		}
 	}
 
 	self.message = "Hello ##modelName##.new";
@@ -465,12 +497,12 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 		});
 	};
 
-	$scope.save = function()
+	$scope.save = function(redirect)
 	{
 		saved = true;
 		log(self.obj);
 		##modelName##Service.update(self.obj,function(data){
-			$location.url('/##modelName##/' + data.id);
+			if (redirect) $location.url('/##modelName##/' + data.id);
 			log(data);
 		});
 	}

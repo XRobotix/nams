@@ -3,7 +3,7 @@
 	    None
   	</div>
 	<div ng-repeat="item in selected | limitTo:3" class="chip">
-	    {{item.name}} 
+	    <a href="#/{{model}}/{{item.id}}"> {{ item.name ? item.name : "ID: "+item.id }} </a>
   	</div>
 	<i ng-show="selected.length > 3" >
 	    ...+{{selected.length-3}}
@@ -75,6 +75,6 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<a href="" class=" modal-action modal-close waves-effect waves-green btn">Done</a>
+		<a href="" class=" modal-action modal-close waves-effect waves-green btn" ng-click="save()" >Done</a>
 	</div>
 </div>
