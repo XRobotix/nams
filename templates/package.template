@@ -1,0 +1,21 @@
+{
+  "main": "index.html",
+  "name": "##appName##",
+  "description": "NAMS generated app",
+  "version": "0.1.0",
+  "keywords": [ "demo", "node-webkit" ],
+  "window": {
+    "title": "##appName##",
+    "icon": "link.png",
+    "toolbar": false,
+    "frame": true,
+    "width": 800,
+    "height": 500,
+    "position": "center",
+    "min_width": 400,
+    "min_height": 200
+  },
+  "webkit": {
+    "plugin": true
+  }
+}

@@ -26,7 +26,8 @@
     "angular-materialize": "~0.1.2",
     "angular-datetime": "~2.1.0",
     "angular-chart.js": "~0.8.8",
-    "material-design-icons-iconfont": "~2.0.4",
-    "mdi": "~1.4.57"
+    "textAngular": "~1.5.0",
+    "angularPrint": "angular-print#~0.3.8",
+    "jspdf": "~1.1.135"
   }
 }

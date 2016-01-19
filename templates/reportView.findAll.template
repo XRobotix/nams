@@ -1,0 +1,43 @@
+<div id="index-banner" class="container">
+	<div class="section">
+		<br><br>
+		<h1 class="header center orange-text">{{r.model}} Reports</h1>
+		<div class="row center">
+			<form class="col s12">
+				<div class="row">
+					<div class="input-field col s11">
+						<i class="material-icons prefix">search</i>
+						<input id="icon_prefix" type="text" ng-model="searchText" class="validate">
+						<label for="icon_prefix">Search Text</label>
+					</div>
+					<div class="input-field col s1">
+						<a href="#/report/{{r.model}}/new" class="btn-large waves-effect waves-light green left">New</a>
+					</div>
+				</div>
+			</form>
+		</div>
+		<br><br>
+	</div>
+	<div class="section">
+		<!--   Icon Section   -->
+		<div class="row">
+			<div class="col s12 m6 l3" ng-repeat="report in r.reports | filter:searchText">
+				<div class="card">
+					<div class="card-content white-text green">
+						<p class="card-stats-title">{{report.title}}</p>
+						<!-- <h4 class="card-stats-number">{{report.total}}</h4> -->
+						<p class="card-stats-compare"><i class="mdi-action-assignment-late"></i> <span class="{{report.color}}-text text-lighten-5">{{report.description}}</span></p>
+					</div>
+					<div class="card-action green darken-2" style="padding:1px;">
+						<div class="row" style="text-align:center;margin:5px;">
+							<div class="col s3"><a href="#/report/{{r.model}}/{{report.id}}" class="waves-effect waves-light"  style="text-align:center;margin:0px;"><i class="material-icons center">search</i></a></div>
+							<div class="col s3"><a href="#/report/{{r.model}}/{{report.id}}/pdf" class="waves-effect waves-light"  style="text-align:center;margin:0px;"><i class="material-icons center">save</i></a></div>
+							<div class="col s3"><a href="#/report/{{r.model}}/{{report.id}}/print" class="waves-effect waves-light"  style="text-align:center;margin:0px;"><i class="material-icons center">print</i></a></div>
+							<div class="col s3"><a href="#/report/{{r.model}}/{{report.id}}/delete" class="waves-effect waves-light"  style="text-align:center;margin:0px;"><i class="material-icons center">delete</i></a></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

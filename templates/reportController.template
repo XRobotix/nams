@@ -1,0 +1,472 @@
+'use strict';
+
+var models = ##config##;
+
+var convertField = function(field)
+{
+	var text = "";
+    switch(field.type) {
+		case "text":
+			text += "##(" + field.name + ")##";
+		    break;
+		case "calculated":
+			text += "##(" + field.name + ")##";
+		    break;
+		case "result":
+			text += "##(" + field.name + ")##";
+		    break;
+		case "file":
+			text += "##f(" + field.name + ")f##";
+		    break;
+		case "img":
+			text += "##i(" + field.name + ")i##";
+		    break;
+		case "date":
+			text += "##d(" + field.name + ")d##";
+		    break;
+		case "range":
+			text += "##(" + field.name + ")##/" + field.max;
+		    break;
+		case "boolean":
+			text += "##b(" + field.name + ")b##";
+		    break;
+		case "fk":
+			text += "##e(" + field.name + ")e##";
+		    break;
+		case "number":
+			text += "##(" + field.name + ")##";
+		    break;
+		case "multiple":
+			text += "##m(" + field.name + ")m##";
+		    break;
+		case "radio":
+			text += "##r(" + field.name + ")r##";
+		    break;
+		case "select":
+			text += "##s(" + field.name + ")s##";
+		    break;
+		default:
+		    text += "";
+	}
+	return text;
+}
+
+angular.module('##appName##.report', ['ngRoute'])
+.config(['$routeProvider',function($routeprovider){
+	
+	$routeprovider.when('/report/all', {
+		controller: 'reportController as r',
+		templateUrl: './views/reportView.html'
+	});
+
+	$routeprovider.when('/report/:model', {
+		controller: 'reportController.findAll as r',
+		templateUrl: './views/reportView.findAll.html'
+	});
+
+	$routeprovider.when('/report/:model/new', {
+		controller: 'reportController.new as r',
+		templateUrl: './views/reportView.new.html'
+	});
+
+	$routeprovider.when('/report/:model/:reportId/edit', {
+		controller: 'reportController.edit as r',
+		templateUrl: './views/reportView.edit.html'
+	});
+
+	$routeprovider.when('/report/:model/:reportId/delete', {
+		controller: 'reportController.delete as r',
+		templateUrl: './views/reportView.delete.html'
+	});
+
+	for (var i = 0; i < models.length; i++) {	
+		$routeprovider.when('/report/'+models[i].name+'/:reportId', {
+			controller: models[i].name+'Controller.populateReport as r',
+			templateUrl: './views/'+models[i].name+'ReportView.findOne.html'
+		});
+
+		$routeprovider.when('/report/'+models[i].name+'/:reportId/:'+models[i].name+'Id', {
+			controller: models[i].name+'Controller.populateReport as r',
+			templateUrl: './views/'+models[i].name+'ReportView.findOne.html'
+		});
+	};
+
+}])
+.directive('dynamic', function ($compile) {
+  return {
+    restrict: 'A',
+    replace: true,
+    link: function (scope, ele, attrs) {
+      scope.$watch(attrs.dynamic, function(html) {
+        ele.html('<div print-section>'+html+'</div>');
+        $compile(ele.contents())(scope);
+        scope.print();
+      });
+    }
+  };
+})
+.service('reportService', function($rootScope,$http) {
+
+    this.findOne = function(id,cb) {
+        $rootScope.loading = true;
+    	$http.get(URL + "/report/" + id)
+    	.then(function(r){
+			$rootScope.loading = false;
+			if (r.data.id)
+			{
+        		cb(r.data);
+			}
+			else
+			{
+				// Materialize.toast("ERROR! report findOne failed", 5000);
+        		cb({});
+			}
+    	},function(e){
+    		log(e);
+			$rootScope.loading = false;
+			Materialize.toast("ERROR! report findOne failed", 5000);
+    	});
+    }
+
+    this.findOneModel = function(model,id,cb) {
+        $rootScope.loading = true;
+    	$http.get(URL + "/" + model + "/" + id)
+    	.then(function(r){
+			$rootScope.loading = false;
+			if (r.data.id)
+			{
+        		cb(r.data);
+			}
+			else
+			{
+				// Materialize.toast("ERROR! report findOne failed", 5000);
+        		cb({});
+			}
+    	},function(e){
+    		log(e);
+			$rootScope.loading = false;
+			Materialize.toast("ERROR! report findOneModel failed", 5000);
+    	});
+    }
+
+    this.delete = function(obj,cb) {
+        $rootScope.loading = true;
+    	$http.get(URL + "/report/destroy/" + obj.id)
+    	.then(function(r){
+			$rootScope.loading = false;
+			if (r.data.id)
+			{
+				Materialize.toast("report #"+r.data.id+" successfully deleted", 2000);
+    			cb(r.data);
+			}
+			else
+			{
+				Materialize.toast("ERROR! report delete failed", 5000);
+        		cb({});
+			}
+    	},function(e){
+    		log(e);
+			$rootScope.loading = false;
+			Materialize.toast("ERROR! report delete failed", 5000);
+    	});
+
+    }
+
+    this.create = function(data,cb) {
+        $rootScope.loading = true;
+    	$http.post(URL + "/report/create",data)
+    	.then(function(r){
+			$rootScope.loading = false;
+			if (r.data.id)
+			{
+	    		Materialize.toast("report #"+r.data.id+" successfully created", 2000);
+	    		cb(r.data);
+			}
+			else
+			{
+				Materialize.toast("ERROR! report create failed", 5000);
+        		cb({});
+			}
+    	},function(e){
+    		log(e);
+			$rootScope.loading = false;
+			Materialize.toast("ERROR! report create failed", 5000);
+    	});
+    }
+
+    this.update = function(data,cb) {
+        $rootScope.loading = true;
+    	$http.post(URL + "/report/update/" + data.id,data)
+    	.then(function(r){
+			$rootScope.loading = false;
+			if (r.data.id)
+			{
+	    		Materialize.toast("report #"+r.data.id+" successfully saved", 2000);
+	    		cb(r.data);
+			}
+			else
+			{
+				Materialize.toast("ERROR! report save failed", 5000);
+        		cb({});
+			}
+    	},function(e){
+    		log(e);
+			$rootScope.loading = false;
+			Materialize.toast("ERROR! report save failed", 5000);
+    	});
+    }
+
+    this.findAll = function(model,cb) {
+ 		$rootScope.loading = true;
+    	$http.get(URL + "/report?model=" + model)
+    	.then(function(r){
+			$rootScope.loading = false;
+			if (r.data.length)
+        	{
+        		cb(r.data);
+			}
+			else
+			{
+				// Materialize.toast("ERROR! report findAll failed", 5000);
+        		cb([]);
+			}
+    	},function(e){
+    		log(e);
+			$rootScope.loading = false;
+			Materialize.toast("ERROR! report findAll failed", 5000);
+    	})
+    }
+
+    this.find = function(headings,searchText,pageId,cb) {
+ 		$rootScope.loading = true;
+    	$http.get(URL + "/report/search?text="+ searchText + "&pageId=" + pageId)
+    	.then(function(r){
+			$rootScope.loading = false;
+			if (r.data.length)
+			{	
+        		cb(r.data);
+			}
+			else
+			{
+				Materialize.toast("ERROR! report find failed", 5000);
+        		cb({});
+			}
+    	},function(e){
+    		log(e);
+			$rootScope.loading = false;
+			Materialize.toast("ERROR! report find failed", 5000);
+    	})
+    }
+
+    this.getSummary = function(cb) {
+ 		$rootScope.loading = true;
+    	$http.get(URL + "/report/summary")
+    	.then(function(r){
+			$rootScope.loading = false;
+			if (r.data)
+			{	
+        		cb(r.data);
+			}
+			else
+			{
+				Materialize.toast("ERROR! report getSummary failed", 5000);
+        		cb({});
+			}
+    	},function(e){
+    		log(e);
+			$rootScope.loading = false;
+			Materialize.toast("ERROR! report getSummary failed", 5000);
+    	})
+    }
+
+    this.getModel = function(model,cb) {
+		for (var i = 0; i < models.length; i++) 
+		{
+			if (models[i].name == model)
+			{
+				cb(models[i]);
+			}
+		};
+    }
+})
+.controller('reportController', function($scope, $rootScope, $location, $http, $routeParams, reportService) {
+
+	var self = this;
+
+	init();
+
+	function init(){
+		reportService.getSummary(function(summary){
+			self.summary = summary;
+		});
+	};
+
+})
+.controller('reportController.findAll', function($scope, $rootScope, $location, $http, $routeParams, reportService) {
+
+	var self = this;
+
+	init();
+
+	function init(){
+		self.model = $routeParams.model;
+		
+		reportService.findAll(self.model,function(reports){
+			self.reports = reports;
+		});
+	};
+
+})
+.controller('reportController.new', function($scope, $rootScope, $location, $http, $routeParams, reportService) {
+
+	var self = this;
+	var saved = false;
+	
+	$scope.$on('$locationChangeStart', function( event ) {
+	    if (!saved)
+	    {
+		    var answer = confirm("Are you sure you want to leave this page?")
+		    if (!answer) {
+		        event.preventDefault();
+		    }
+	    }
+	});
+
+	init();
+
+	function init(){
+		self.model = $routeParams.model;
+		self.reportId = $routeParams.reportId;
+		self.obj = {};
+		self.obj.model = self.model;
+
+		reportService.getModel(self.model,function(conf){
+			log(conf);
+			self.conf = conf;
+		});
+		// self.reports = [
+		// 		{id:1,title:"TestReport",description:"This is the report description.",color:"red"}
+		// 	]
+	};
+
+	$scope.tinymceOptions = {
+        theme: "modern",
+        plugins: [
+            "advlist autolink lists charmap print preview hr anchor pagebreak",
+            "searchreplace wordcount visualblocks visualchars code fullscreen",
+            "insertdatetime nonbreaking save table contextmenu directionality",
+            "emoticons template paste textcolor"
+        ],
+        setup: function(editor) {
+        	self.editor = editor;
+    	},
+        toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+        toolbar2: "print preview media | forecolor backcolor emoticons",
+        image_advtab: true,
+        height: "400px"
+    };
+
+    self.insertField = function(field) {
+		self.editor.insertContent(convertField(field));
+		// t.body = $interpolate($scope.tinymceModel)($scope);
+	}
+
+	$scope.save = function(redirect)
+	{
+		saved = true;
+		reportService.create(self.obj,function(data){
+			if (redirect) $location.url('/report/' + self.model + "/" + data.id);
+		});
+	}
+
+})
+.controller('reportController.edit', function($scope, $rootScope, $location, $http, $routeParams, reportService) {
+
+	var self = this;
+	var saved = false;
+
+	$scope.$on('$locationChangeStart', function( event ) {
+	    if (!saved)
+	    {
+		    var answer = confirm("Are you sure you want to leave this page?")
+		    if (!answer) {
+		        event.preventDefault();
+		    }
+	    }
+	});
+
+	init();
+
+	function init(){
+		self.model = $routeParams.model;
+		self.reportId = $routeParams.reportId;
+		reportService.findOne(self.reportId,function(obj){
+			$scope.$applyAsync(function(){
+				self.obj = obj;
+			})
+		});
+		reportService.getModel(self.model,function(conf){
+			log(conf);
+			self.conf = conf;
+		});
+		// self.reports = [
+		// 		{id:1,title:"TestReport",description:"This is the report description.",color:"red"}
+		// 	]
+	};
+
+	$scope.tinymceOptions = {
+        theme: "modern",
+        plugins: [
+            "advlist autolink lists charmap print preview hr anchor pagebreak",
+            "searchreplace wordcount visualblocks visualchars code fullscreen",
+            "insertdatetime nonbreaking save table contextmenu directionality",
+            "emoticons template paste textcolor"
+        ],
+        setup: function(editor) {
+        	self.editor = editor;
+    	},
+        toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+        toolbar2: "print preview media | forecolor backcolor emoticons",
+        image_advtab: true,
+        height: "400px"
+    };
+
+    self.insertField = function(field) {
+		self.editor.insertContent(convertField(field));
+		// t.body = $interpolate($scope.tinymceModel)($scope);
+	}
+
+	$scope.save = function(redirect)
+	{
+		saved = true;
+		reportService.update(self.obj,function(data){
+			if (redirect) $location.url('/report/' + self.model + "/" + data.id);
+		});
+	}
+
+})
+.controller('reportController.delete', function($scope, $rootScope, $location, $http, $routeParams, reportService) {
+
+	var self = this;
+	self.obj = {};
+
+	init();
+
+	function init(){
+		self.reportId = $routeParams.reportId;
+		reportService.findOne(self.reportId,function(data){
+			log(data);
+			// $scope.$apply(function(){
+				self.obj = data;
+			// });
+		});
+	};
+
+	$scope.delete = function()
+	{
+		reportService.delete(self.obj,function(data){
+			$location.url('/report/all');
+		});
+	}
+
+});

@@ -18,7 +18,7 @@
 						<th ng-repeat="heading in headings" ng-click="order=heading">{{heading}}</th>
 						<th>Actions</th>
 					</tr>
-				</thead>
+				</thead> 
 
 				<tbody>
 					<tr ng-repeat="item in data | filter:searchText | limitTo:10:((page-1)*10) | orderBy : order">

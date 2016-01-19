@@ -2,7 +2,7 @@
 	<br><br>
   	<div class="section">
 		<h1 class="header center orange-text">##modelNameTitle## Record</h1>
-		<div class="fixed-action-btn horizontal" style="top: 10%; right: 24px;">
+		<div class="fixed-action-btn horizontal" style="top: 10%; right: 24px; bottom:auto;">
 			<a class="btn-floating btn-large red">
 			  <i class="large material-icons">menu</i>
 			</a>

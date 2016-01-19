@@ -47,6 +47,18 @@ function generateApiFromTempate(templateName,generateName,generatedType,toBeRepl
 	});
 }
 
+var generateMenuDropdown = function(modelName)
+{
+	return "\
+	  <li><a class='dropdown-button' data-ng-href='#/"+modelName+"' data-activates='dropdown_"+modelName+"' dropdown data-hover='true'>"+upcase(modelName)+"<i class='mdi-navigation-arrow-drop-down right'></i></a></li>\n\
+	  <ul id='dropdown_"+modelName+"' class='dropdown-content'>\n\
+	    <li><a data-ng-href='#/"+modelName+"'><i class='material-icons light-blue-text center'>dashboard</i></a></li>\n\
+	    <li><a data-ng-href='#/"+modelName+"/all'><i class='material-icons light-blue-text center'>search</i></a></li>\n\
+	    <li><a data-ng-href='#/"+modelName+"/new'><i class='material-icons light-blue-text center'>add</i></a></li>\n\
+	    <li><a data-ng-href='#/report/"+modelName+"/'><i class='material-icons light-blue-text center'>description</i></a></li>\n\
+	  </ul>\n"
+}
+
 var generateApp = function(models,url)
 {
 	var modelsInclude = "";
@@ -56,20 +68,12 @@ var generateApp = function(models,url)
 		URL = url;
 		modelsInclude += ",'" + appName + ".login'";
 		controllersInclude += "<script src='./controllers/loginController.js'></script>\n";
+		modelsInclude += ",'" + appName + ".report'";
+		controllersInclude += "<script src='./controllers/reportController.js'></script>\n";
 	
 	var summaryArray = [];
 	var summaryServices = [];
 
-	var generateMenuDropdown = function(modelName)
-	{
-		return "\
-		  <li><a class='dropdown-button' href='#/"+modelName+"' data-activates='dropdown_"+modelName+"' dropdown data-hover='true'>"+upcase(modelName)+"<i class='mdi-navigation-arrow-drop-down right'></i></a></li>\n\
-		  <ul id='dropdown_"+modelName+"' class='dropdown-content'>\n\
-		    <li><a href='/#/"+modelName+"'><i class='material-icons light-blue-text center'>dashboard</i></a></li>\n\
-		    <li><a href='/#/"+modelName+"/all'><i class='material-icons light-blue-text center'>search</i></a></li>\n\
-		    <li><a href='/#/"+modelName+"/new'><i class='material-icons light-blue-text center'>add</i></a></li>\n\
-		  </ul>\n"
-	}
 
 	for (var i = 0; i < models.length; i++) {
 		modelsInclude += ",'" + appName + "." + models[i].name.toLowerCase() + "'";
@@ -116,6 +120,18 @@ var generateApp = function(models,url)
 			{field:"modelName",value:upcase("user")}
 		]);
 
+	generateApiFromTempate("apiReportController",upcase("report")+"Controller.js","controllers",
+		[
+			{field:"appName",value:appName},
+			{field:"modelName",value:upcase("report")}
+		]);
+
+	generateApiFromTempate("apiReportModel",upcase("report")+".js","models",
+		[
+			{field:"appName",value:appName},
+			{field:"modelName",value:upcase("report")}
+		]);
+
 	generateFromTempate("index","index.html","",
 			[
 				{field:"appName",value:appName},
@@ -141,13 +157,57 @@ var generateApp = function(models,url)
 	generateFromTempate("tableDirective","tableDirective.html","views/directives",[]);
 
 	generateFromTempate("bower","bower.json","",[{field:"appName",value:appName}]);
+	generateFromTempate("package","package.json","",[{field:"appName",value:appName}]);
 	generateLogin(appName);
+	generateReport(appName,models);
 }
 
 var generateLogin = function(appName) 
 {
 	generateFromTempate("loginController","loginController.js","controllers",[{field:"appName",value:appName}]);
 	generateFromTempate("loginView","loginView.html","views",[]);
+}
+
+var generateReport = function(appName,models) 
+{
+
+	generateFromTempate("reportView","reportView.html","views",
+		[
+			{field:"appName",value:appName}
+		]);	
+
+	// generateFromTempate("reportView.findOne","reportView.findOne.html","views",
+	// 	[
+	// 		{field:"appName",value:appName}
+	// 	]);
+
+	generateFromTempate("reportView.findAll","reportView.findAll.html","views",
+		[
+			{field:"appName",value:appName}
+		]);
+
+	generateFromTempate("reportView.edit","reportView.edit.html","views",
+		[
+			{field:"appName",value:appName}
+		]);
+
+	generateFromTempate("reportView.new","reportView.new.html","views",
+		[
+			{field:"appName",value:appName}
+		]);
+
+	generateFromTempate("reportView.delete","reportView.delete.html","views",
+		[
+			{field:"appName",value:appName}
+		]);
+
+	generateFromTempate("reportController","reportController.js","controllers",
+		[
+			{field:"appName",value:appName},
+			{field:"config",value:JSON.stringify(models)}
+		]);
+	
+	generateFromTempate("reportView","reportView.html","views",[]);
 }
 
 var generateController = function(model)
@@ -213,6 +273,14 @@ var generateController = function(model)
 		]);	
 
 	generateFromTempate("view.findOne",model.name+"View.findOne.html","views",
+		[
+			{field:"appName",value:appName},
+			{field:"modelName",value:model.name},
+			{field:"modelNameTitle",value:upcase(model.name)},
+			{field:"modelNameAs",value:model.name[0]}
+		]);
+
+	generateFromTempate("reportView.findOne",model.name+"ReportView.findOne.html","views",
 		[
 			{field:"appName",value:appName},
 			{field:"modelName",value:model.name},

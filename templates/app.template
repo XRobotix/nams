@@ -8,13 +8,13 @@ function log(obj)
 	if (debug) console.log(obj); 
 }
 
-var mainApp = angular.module('##appName##', ['ngRoute','naif.base64','ui.materialize','chart.js'##models##])
-.config(function($routeProvider, $locationProvider, $httpProvider) { 
+var mainApp = angular.module('##appName##', ['ngRoute','naif.base64','ui.materialize','chart.js','ui.tinymce'##models##])
+.config(function($routeProvider, $locationProvider, $httpProvider,$sceProvider) { 
 	$routeProvider.when('/', {
 		controller: 'homeController as h',
 		templateUrl: './views/homeView.html'
 	});
-
+  $sceProvider.enabled(false);
 	$routeProvider.otherwise({ redirectTo: useLogin ? '/login' : '/'}); 
 })
 .run(function($http,$location,$rootScope){
@@ -62,8 +62,16 @@ var mainApp = angular.module('##appName##', ['ngRoute','naif.base64','ui.materia
             "model" : "=model",
             "search" : "=search",
             "page" : "=page"
-    	},
+      },
         templateUrl : "views/directives/tableDirective.html"
+    };
+})
+.directive("imgView", function() {
+    return {
+        scope: {
+            "data" : "=data"
+    	},
+        template : "<img ng-src='data:{{data.filetype}};base64,{{data.base64}}' />"
     };
 })
 .directive('fileModel', ['$parse', function ($parse) {

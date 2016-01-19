@@ -1,0 +1,23 @@
+<div id="index-banner">
+	<div class="section">
+	    <button class="btn waves-effect waves-light green" style="position:fixed;top:10%;right:24px;" type="button" ng-click="save(true)" name="action">Save
+        	<i class="material-icons right">save</i>
+      	</button>
+		<br/>
+		<br/>
+		<h1 class="header center orange-text">{{r.obj.title}} <small>({{r.model}})</small></h1>
+	</div>
+	<div class="section">
+		<div class="row">
+			<div class="col m4 s12" >
+				<div ng-repeat="field in r.conf.fields" class="col m4 s6 center" style="padding-bottom:10px;"><a ng-click="r.insertField(field);" class="waves-effect waves-light btn">{{field.displayName}}</a></div>
+			</div>
+			<div class="col m4 s12">
+				<textarea ui-tinymce="tinymceOptions" ng-model="r.obj.body"></textarea>
+			</div>
+			<div class="col m4 s12">
+				<pre>{{r.obj | json}}</pre>
+			</div>
+		</div>
+	</div>
+</div>

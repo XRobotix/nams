@@ -1,0 +1,63 @@
+/**
+ * ##modelName##Controller
+ *
+ * @description :: Server-side logic for managing ##modelName##s
+ * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
+ */
+
+module.exports = {
+	all: function(req,res)
+	{
+		##modelName##.find({})
+		.then(function(r){
+			res.json(r);	
+		},function(e){
+			res.forbidden();
+		});
+	},
+	dash: function(req,res)
+	{
+		##modelName##.find({})
+		.then(function(r){
+			res.json({total:(r.length||0)});	
+		},function(e){
+			res.forbidden();
+		});  
+	},
+	summary: function(req,res)
+	{
+		##modelName##.find({})
+		.then(function(r){
+			var summary = {};
+			for (var i = 0; i < r.length; i++) {
+				summary[r[i].model] = summary[r[i].model] || 0;
+				summary[r[i].model]++;
+			};
+			res.json(summary);	
+		},function(e){
+			res.forbidden();
+		});  
+	},
+	search: function(req,res)
+	{
+		var values = req.allParams();
+		var searchText = values.text || '';
+		var pageId = values.page || '';
+		var limit = values.limit || 10;
+
+		##modelName##.find({ 
+			or : [
+    			{ idNumber: {'contains' : searchText} },
+    			{ tel: {'contains' : searchText} },
+    			{ name: {'contains' : searchText} },
+    			{ surname: {'contains' : searchText} }
+  			],
+  			limit: limit, sort: 'surname ASC', skip: (pageId-1)*limit
+  		})
+		.then(function(r){
+			res.json(r);	
+		},function(e){
+			res.forbidden();
+		});
+	}
+};

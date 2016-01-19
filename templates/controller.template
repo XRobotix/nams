@@ -536,3 +536,83 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 	}
 
 })
+.controller('##modelName##Controller.populateReport', function($scope, $rootScope, $location, $http, $routeParams, ##modelName##Service,reportService) {
+
+	var self = this;
+	self.obj = {};
+
+	$scope.print = function()
+	{
+		setTimeout(function(){
+			$scope.$applyAsync(function(){
+				self.html = $('#printDiv').html();
+			})
+		},500);
+	}
+
+	init();
+
+	function replace(str,c,begin,end)
+	{
+		return str.replace(new RegExp("##"+c+"\\(", "g"), begin+"r.modelObj.").replace(new RegExp("\\)"+c+"##", "g"), end);
+	}
+
+	function init(){
+		self.model = $routeParams.model;
+		self.reportId = $routeParams.reportId;
+		self.modelId = $routeParams.modelId;
+		self.##modelName##Id = $routeParams.##modelName##Id;
+		
+		if (self.##modelName##Id)
+		{
+
+			reportService.findOne(self.reportId,function(obj){
+				self.obj = obj;
+				//##(???)##
+				self.obj.body = replace(self.obj.body,"","{{","}}");
+				self.obj.body = replace(self.obj.body,"f","<a>{{","}}</a>");
+				self.obj.body = replace(self.obj.body,"e","<a>{{",".name}}</a>");
+				self.obj.body = replace(self.obj.body,"m","<ul><li ng-repeat='item in ","'>{{item.id}}</li></ul>");
+				self.obj.body = replace(self.obj.body,"s","<b>{{","}}</b>");
+
+				self.obj.body = replace(self.obj.body,"i","<div img-view data='","'></div>");
+				self.obj.body = replace(self.obj.body,"d","<b>{{","}}</b>");
+				self.obj.body = replace(self.obj.body,"b","<b>{{","}}</b>");
+
+				self.result = "<h1 class='center'>"+self.obj.title+"</h1>"+"<p class='center'><b><small>"+self.obj.description+"</small></b></p>"+self.obj.body;
+			});
+
+			##modelName##Service.findOne(self.##modelName##Id,function(data){
+				log(data);
+				self.modelObj = data;
+				$scope.print();
+			});
+		}
+	
+	};
+
+	$scope.selectRecord = function(id)
+	{
+		$location.url('/report/##modelName##/'+self.reportId+"/"+id);
+	}
+
+	$scope.tinymceOptions = {
+        theme: "modern",
+        plugins: [
+            "advlist autolink lists charmap print preview hr anchor pagebreak",
+            "searchreplace wordcount visualblocks visualchars code fullscreen",
+            "insertdatetime nonbreaking save table contextmenu directionality",
+            "emoticons template paste textcolor"
+        ],
+        setup: function(editor) {
+        	self.editor = editor;
+    	},
+        toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+        toolbar2: "print preview media | forecolor backcolor emoticons",
+        image_advtab: true,
+        raw: true,
+        height: "400px"
+    };
+
+
+})
