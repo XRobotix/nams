@@ -30,7 +30,7 @@
 					</div>
 					<div class="card-action green darken-2" style="padding:1px;">
 						<div class="row" style="text-align:center;margin:5px;">
-							<div class="col s3"><a href="#/report/{{r.model}}/{{report.id}}" class="waves-effect waves-light"  style="text-align:center;margin:0px;"><i class="material-icons center">search</i></a></div>
+							<div class="col s3"><a href="#/report/{{r.model}}/{{report.id}}/{{r.modelId}}" class="waves-effect waves-light"  style="text-align:center;margin:0px;"><i class="material-icons center">search</i></a></div>
 							<div class="col s3"><a href="#/report/{{r.model}}/{{report.id}}/pdf" class="waves-effect waves-light"  style="text-align:center;margin:0px;"><i class="material-icons center">save</i></a></div>
 							<div class="col s3"><a href="#/report/{{r.model}}/{{report.id}}/print" class="waves-effect waves-light"  style="text-align:center;margin:0px;"><i class="material-icons center">print</i></a></div>
 							<div class="col s3"><a href="#/report/{{r.model}}/{{report.id}}/delete" class="waves-effect waves-light"  style="text-align:center;margin:0px;"><i class="material-icons center">delete</i></a></div>

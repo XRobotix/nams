@@ -123,12 +123,12 @@ var mainApp = angular.module('##appName##', ['ngRoute','naif.base64','ui.materia
         }
         else
         {
-          Materialize.toast("No Data! "+model+" #"+r.data.id+" getDashData failed", 5000);
+          Materialize.toast("No Data! "+model+" getDashData failed", 5000);
               cb({});
         }
       },function(e){
         log(e);
-        Materialize.toast("ERROR! "+model+" #"+r.data.id+" getDashData failed", 5000);
+        Materialize.toast("ERROR! "+model+" getDashData failed", 5000);
       });
     }
 })

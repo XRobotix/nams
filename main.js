@@ -221,7 +221,7 @@ var generateController = function(model)
 		if (model.fields[i].top)
 		{	
 			headings.push(model.fields[i].name);
-			apiFields += model.fields[i].name + ": {type: 'string'},\n";
+			// apiFields += model.fields[i].name + ": {type: 'string'},\n";
 		}
 		if (model.fields[i].type == "fk")
 		{
@@ -528,6 +528,10 @@ var generateRecordView = function(model,headings)
 			    case "text":
 		  			res += "<p><b>" + groups[key][i].name + "</b>: {{" + model.name + "." + groups[key][i].name + "}}</p>\n";
 		  			resE += "<p><b>" + groups[key][i].name + "</b>: {{" + model.name + "." + groups[key][i].name + "}}</p>\n";
+			        break;
+			    case "textarea":
+		  			res += "<p><b>" + groups[key][i].name + "</b>: <br/>{{" + model.name + "." + groups[key][i].name + "}}</p>\n";
+		  			resE += "<p><b>" + groups[key][i].name + "</b>: <br/>{{" + model.name + "." + groups[key][i].name + "}}</p>\n";
 			        break;
 			    case "calculated":
 		  			res += "<p><b>" + groups[key][i].name + "</b>: {{" + model.name + "." + groups[key][i].name + "}}</p>\n";

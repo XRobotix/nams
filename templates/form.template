@@ -3,7 +3,7 @@
     <div class="row">  
       ##formData##
     </div>
-    <div class="row>
+    <div class="row">
       <button class="btn-large waves-effect waves-light green" style="position:fixed;top:10%;right:24px;" type="button" ng-click="save(true)" name="action">{{ ##modelNameAs##.obj.id ? "Save" : "Create" }}
         <i class="material-icons right">save</i>
       </button>

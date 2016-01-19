@@ -9,6 +9,9 @@ var convertField = function(field)
 		case "text":
 			text += "##(" + field.name + ")##";
 		    break;
+		case "textarea":
+			text += "<br/>##(" + field.name + ")##";
+		    break;
 		case "calculated":
 			text += "##(" + field.name + ")##";
 		    break;
@@ -57,6 +60,11 @@ angular.module('##appName##.report', ['ngRoute'])
 	$routeprovider.when('/report/all', {
 		controller: 'reportController as r',
 		templateUrl: './views/reportView.html'
+	});
+	
+	$routeprovider.when('/report/:model/:modelId/generate', {
+		controller: 'reportController.findAll as r',
+		templateUrl: './views/reportView.findAll.html'
 	});
 
 	$routeprovider.when('/report/:model', {
@@ -310,6 +318,7 @@ angular.module('##appName##.report', ['ngRoute'])
 
 	function init(){
 		self.model = $routeParams.model;
+		self.modelId = $routeParams.modelId;
 		
 		reportService.findAll(self.model,function(reports){
 			self.reports = reports;

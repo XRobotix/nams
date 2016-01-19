@@ -67,6 +67,7 @@ config.json
 
 node_modules
 generated
+dist
 templates/bower_components
 
 ################################################
