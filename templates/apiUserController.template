@@ -16,6 +16,7 @@ module.exports = {
 			.then(function(r){
 				if (r)
 				{
+					delete r.password;
 					req.session.authenticated = true;
 					req.session.user = r;
 					res.json(r);
@@ -38,14 +39,16 @@ module.exports = {
 	{
 		req.session.authenticated = false;
 		delete req.session.user;
-		res.redirect("/");
+		res.json({success:true});
 	},
 	find: function(req,res)
 	{
 		if (req.session.user)
+		{
 			res.json(req.session.user);
+		}
 		else
-			res.forbidden();
+			res.forbidden("You are not logged in.");
 	}
 
 };

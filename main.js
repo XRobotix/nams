@@ -70,7 +70,7 @@ var generateApp = function(models,url)
 		controllersInclude += "<script src='./controllers/loginController.js'></script>\n";
 		modelsInclude += ",'" + appName + ".report'";
 		controllersInclude += "<script src='./controllers/reportController.js'></script>\n";
-	
+	var modelPolicies = "";
 	var summaryArray = [];
 	var summaryServices = [];
 
@@ -83,6 +83,14 @@ var generateApp = function(models,url)
 		generateController(models[i]);
 		summaryArray.push("{title:'" + upcase(models[i].name) + " Records',color:'" + (models[i].color ? models[i].color : "green") + "',icon:'mdi-social-group-add',model:'" + models[i].name + "'},");
 		summaryServices.push("homeService.getDashData('" + models[i].name + "',function(data){setDashData('" + models[i].name + "',data)});");
+		var tmp = upcase(models[i].name) + "Controller: {\n\
+		    find: ['log','sessionAuth','clearanceLevel2'],\n\
+		    create: ['log','sessionAuth','clearanceLevel3','create'],\n\
+		    update: ['log','sessionAuth','clearanceLevel4'],\n\
+		    destroy: ['log','sessionAuth','clearanceLevel5']\n\
+  		}";
+		modelPolicies += ",\n\n";
+		modelPolicies += tmp;
 	};
 
 	generateFromTempate("app","app.js","",
@@ -158,6 +166,9 @@ var generateApp = function(models,url)
 
 	generateFromTempate("bower","bower.json","",[{field:"appName",value:appName}]);
 	generateFromTempate("package","package.json","",[{field:"appName",value:appName}]);
+
+	generateFromTempate("policies","policies.js","server/config",[{field:"modelPolicies",value: modelPolicies}]);
+	
 	generateLogin(appName);
 	generateReport(appName,models);
 }
@@ -375,6 +386,50 @@ var generateForm = function(model)
 					formData += "	</div>\n";
 					formData += "</div></input-field>\n";
 			        break;
+			    case "camera":
+			    	formData += "<label class='active'>"+groups[key][i].name+"</label>";
+			        formData += "<ng-camera\n\
+								    capture-message='Cheeeese!'\n\
+								    countdown='3'\n\
+								    output-height='160'\n\
+								    output-width='213'\n\
+								    viewer-height='320'\n\
+								    viewer-width='426'\n\
+								    image-format='jpeg'\n\
+								    jpeg-quality='100'\n\
+								    action-message='Take picture'\n\
+								    snapshot='"+ model.name[0] +  ".obj." + groups[key][i].name+"'\n\
+								></ng-camera></input-field>\n";
+			        break;
+			    case "audio":
+			    	formData += "<label style='position: inherit;'>"+groups[key][i].name+"</label>";
+			        formData += "<ng-audio-recorder' id='audioInput' audio-model='"+ model.name[0] +  ".obj." + groups[key][i].name+"'>\n\
+								  <!-- Start controls, exposed via recorder-->\n\
+								  <div ng-if='recorder.isAvailable'>\n\
+								    <button ng-click='recorder.startRecord()' class='btn ' type='button' ng-disabled='recorder.status.isRecording'>\n\
+								        Start Record\n\
+								    </button>\n\
+								    <button ng-click='recorder.stopRecord()' class='btn ' type='button' ng-disabled='recorder.status.isRecording === false'>\n\
+								        Stop Record\n\
+								    </button>\n\
+								    <button ng-click='recorder.playbackRecording()' class='btn ' type='button'\n\
+								            ng-disabled='recorder.status.isRecording || !recorder.audioModel'>\n\
+								        Play Back\n\
+								    </button>\n\
+								  </div>\n\
+								  <div ng-if='!recorder.isAvailable'>\n\
+								    Message for users when recording is not possible.\n\
+								  </div>\n\
+								  <!-- End controls-->\n\
+								          <div ng-if='!recorder.isAvailable'>\n\
+								            Your browser does not support this feature natively, please use latest version of <a\n\
+								                href='https://www.google.com/chrome/browser' target='_blank'>Google Chrome</a> or <a\n\
+								                href='https://www.mozilla.org/en-US/firefox/new/' target='_blank'>Mozilla Firefox</a>. If you're on\n\
+								            Safari or Internet Explorer, you can install <a href='https://get.adobe.com/flashplayer/'>Adobe Flash</a> to\n\
+								            use this feature.\n\
+								        </div>\n\
+								</ng-audio-recorder></input-field>\n";
+			        break;
 			    case "file":
 			        formData += "<div class='row'>\n";
 				    formData += "  <div class='col s8'>\n";
@@ -550,6 +605,14 @@ var generateRecordView = function(model,headings)
 			    case "img":
 		  			res += "<img materialboxed class='materialboxed responsive-img' width='10%' alt='No Photo' ng-src='data:{{" + model.name +  "." + groups[key][i].name + ".filetype}};base64,{{" + model.name +  "." + groups[key][i].name + ".base64}}'>\n";
 		  			resE += "<img materialboxed class='materialboxed responsive-img' width='10%' alt='No Photo' ng-src='data:{{" + model.name +  "." + groups[key][i].name + ".filetype}};base64,{{" + model.name +  "." + groups[key][i].name + ".base64}}'>\n";
+			        break;
+			    case "camera":
+		  			res += "<img materialboxed class='materialboxed responsive-img' width='10%' alt='No Photo' ng-src='" + model.name +  "." + groups[key][i].name + "'>\n";
+		  			resE += "<img materialboxed class='materialboxed responsive-img' width='10%' alt='No Photo' ng-src='" + model.name +  "." + groups[key][i].name + "'>\n";
+			        break;
+			    case "audio":
+		  			// res += "<img materialboxed class='materialboxed responsive-img' width='10%' alt='No Photo' ng-src='" + model.name +  "." + groups[key][i].name + "'>\n";
+		  			// resE += "<img materialboxed class='materialboxed responsive-img' width='10%' alt='No Photo' ng-src='" + model.name +  "." + groups[key][i].name + "'>\n";
 			        break;
 			    case "date":
 		  			res += "<p><b>" + groups[key][i].name + "</b>: {{" + model.name + "." + groups[key][i].name + "}}</p>\n";

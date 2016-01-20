@@ -1,25 +1,29 @@
 var URL = '##url##';
 var prod = true;
 var debug = true; 
-var useLogin = false;
+var useLogin = true;
 
 function log(obj) 
 { 
 	if (debug) console.log(obj); 
 }
 
-var mainApp = angular.module('##appName##', ['ngRoute','naif.base64','ui.materialize','chart.js','ui.tinymce'##models##])
+var mainApp = angular.module('##appName##', ['ngRoute','naif.base64','ui.materialize','chart.js','ui.tinymce','camera','angularAudioRecorder'##models##])
 .config(function($routeProvider, $locationProvider, $httpProvider,$sceProvider) { 
 	$routeProvider.when('/', {
 		controller: 'homeController as h',
 		templateUrl: './views/homeView.html'
 	});
   $sceProvider.enabled(false);
+  $httpProvider.defaults.withCredentials = true;
 	$routeProvider.otherwise({ redirectTo: useLogin ? '/login' : '/'}); 
 })
 .run(function($http,$location,$rootScope){
 
 	init();
+  setInterval(function(){
+    init();
+  },3000);
 
 	function init(){
 		// Materialize.toast("Changed to page ", 1000);
@@ -29,7 +33,6 @@ var mainApp = angular.module('##appName##', ['ngRoute','naif.base64','ui.materia
 			if (r.statusText == 'OK') 
 			{
 				$rootScope.user = r.data;
-				Materialize.toast("Login Successful ", 2000);
 			}
 			else
 			{
@@ -43,8 +46,14 @@ var mainApp = angular.module('##appName##', ['ngRoute','naif.base64','ui.materia
 			console.log(e);
 			if (useLogin)
 			{
-				Materialize.toast("ERROR! Login Failed ", 5000);
-        $location.url('/login');
+        if (e.statusText == "Forbidden")
+        {
+          $location.url('/login');
+        }
+        else  
+        {
+          Materialize.toast("ERROR! Login Failed ", 5000);
+        }
 			}
 		});
 	};
@@ -128,7 +137,10 @@ var mainApp = angular.module('##appName##', ['ngRoute','naif.base64','ui.materia
         }
       },function(e){
         log(e);
-        Materialize.toast("ERROR! "+model+" getDashData failed", 5000);
+        if (e.statusText != "Forbidden")
+        {
+          Materialize.toast("ERROR! "+model+" getDashData failed", 5000);
+        }
       });
     }
 })

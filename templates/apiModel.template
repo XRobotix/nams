@@ -12,11 +12,12 @@ module.exports = {
   },
   afterCreate: function(obj,next)
   {
+  console.log("CREATED",obj);
   if ("##modelName##" != "Log")
   {
     Log.create({model:"##modelName##",action:"created",recordId:obj.id});
-    next();
   }     
+    next();
   },
   beforeUpdate: function(obj,next)
   {

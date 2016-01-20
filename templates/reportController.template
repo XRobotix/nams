@@ -131,8 +131,11 @@ angular.module('##appName##.report', ['ngRoute'])
 			}
     	},function(e){
     		log(e);
-			$rootScope.loading = false;
-			Materialize.toast("ERROR! report findOne failed", 5000);
+			if (e.statusText != "Forbidden")
+			{	
+				$rootScope.loading = false;
+				Materialize.toast("ERROR! report findOne failed", 5000);
+			}
     	});
     }
 
@@ -152,8 +155,11 @@ angular.module('##appName##.report', ['ngRoute'])
 			}
     	},function(e){
     		log(e);
-			$rootScope.loading = false;
-			Materialize.toast("ERROR! report findOneModel failed", 5000);
+			if (e.statusText != "Forbidden")
+			{	
+				$rootScope.loading = false;
+				Materialize.toast("ERROR! report findOneModel failed", 5000);
+			}
     	});
     }
 
@@ -174,8 +180,11 @@ angular.module('##appName##.report', ['ngRoute'])
 			}
     	},function(e){
     		log(e);
-			$rootScope.loading = false;
-			Materialize.toast("ERROR! report delete failed", 5000);
+			if (e.statusText != "Forbidden")
+			{	
+				$rootScope.loading = false;
+				Materialize.toast("ERROR! report delete failed", 5000);
+			}
     	});
 
     }
@@ -197,8 +206,11 @@ angular.module('##appName##.report', ['ngRoute'])
 			}
     	},function(e){
     		log(e);
-			$rootScope.loading = false;
-			Materialize.toast("ERROR! report create failed", 5000);
+			if (e.statusText != "Forbidden")
+			{	
+				$rootScope.loading = false;
+				Materialize.toast("ERROR! report create failed", 5000);
+			}
     	});
     }
 
@@ -219,8 +231,11 @@ angular.module('##appName##.report', ['ngRoute'])
 			}
     	},function(e){
     		log(e);
-			$rootScope.loading = false;
-			Materialize.toast("ERROR! report save failed", 5000);
+			if (e.statusText != "Forbidden")
+			{	
+				$rootScope.loading = false;
+				Materialize.toast("ERROR! report save failed", 5000);
+			}
     	});
     }
 
@@ -240,8 +255,11 @@ angular.module('##appName##.report', ['ngRoute'])
 			}
     	},function(e){
     		log(e);
-			$rootScope.loading = false;
-			Materialize.toast("ERROR! report findAll failed", 5000);
+			if (e.statusText != "Forbidden")
+			{	
+				$rootScope.loading = false;
+				Materialize.toast("ERROR! report findAll failed", 5000);
+			}
     	})
     }
 
@@ -261,8 +279,11 @@ angular.module('##appName##.report', ['ngRoute'])
 			}
     	},function(e){
     		log(e);
-			$rootScope.loading = false;
-			Materialize.toast("ERROR! report find failed", 5000);
+			if (e.statusText != "Forbidden")
+			{	
+				$rootScope.loading = false;
+				Materialize.toast("ERROR! report find failed", 5000);
+			}
     	})
     }
 
@@ -282,8 +303,11 @@ angular.module('##appName##.report', ['ngRoute'])
 			}
     	},function(e){
     		log(e);
-			$rootScope.loading = false;
-			Materialize.toast("ERROR! report getSummary failed", 5000);
+			if (e.statusText != "Forbidden")
+			{	
+				$rootScope.loading = false;
+				Materialize.toast("ERROR! report getSummary failed", 5000);
+			}
     	})
     }
 

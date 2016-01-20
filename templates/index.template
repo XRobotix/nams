@@ -16,18 +16,8 @@
 
   <style type="text/css">
 
-    @media print {
-      body * {
-        visibility: hidden;
-      }
-      #reportDiv * {
-        visibility: visible;
-      }
-      #reportDiv {
-        position: absolute;
-        left: 0;
-        top: 0;
-      }
+    ::-webkit-scrollbar { 
+        display: none; 
     }
 
   </style>
@@ -122,10 +112,13 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js"></script>
 
  -->
+ 
   <script src="./bower_components/jquery/dist/jquery.min.js"></script>
   <script src="./bower_components/Materialize/dist/js/materialize.min.js"></script>
   <script src="./bower_components/tinymce-dist/tinymce.js"></script>
   <script src="./bower_components/Chart.js/Chart.min.js"></script>
+  <script src="./bower_components/wavesurfer.js/dist/wavesurfer.min.js"></script>
+  <script src="./bower_components/webcamjs/webcam.min.js"></script>
   
   <script src="./bower_components/angular/angular.min.js"></script>
   <script src="./bower_components/angular-aria/angular-aria.js"></script>
@@ -135,16 +128,22 @@
   <script src="./bower_components/angular-chart.js/dist/angular-chart.min.js"></script>
   <script src="./bower_components/angular-ui-tinymce/src/tinymce.js"></script>
   
+  <script src="./bower_components/ng-camera/dist/ng-camera.js"></script>
   <script src="./bower_components/angular-materialize/src/angular-materialize.js"></script>
+  <script src="./bower_components/angularAudioRecorder/dist/angular-audio-recorder.min.js"></script>
 
   <script src="app.js"></script>
   ##controllersInclude##
 
 
   <script>
-    var ngui = require('nw.gui');
-    var nwin = ngui.Window.get();
-    nwin.enterFullscreen();
+    io.sails.url = 'http://localhost:1337';
+    if (require)
+    {
+      var ngui = require('nw.gui');
+      var nwin = ngui.Window.get();
+      nwin.maximize();
+    }
   </script>
 
   </body>

@@ -91,13 +91,20 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 			}
 			else
 			{
-				// Materialize.toast("ERROR! ##modelName## #"+r.data.id+" findOne failed", 5000);
+				// Materialize.toast("ERROR! ##modelName## findOne failed", 5000);
         		cb({});
 			}
     	},function(e){
     		log(e);
 			$rootScope.loading = false;
-			Materialize.toast("ERROR! ##modelName## #"+r.data.id+" findOne failed", 5000);
+			if (e.statusText == "Forbidden")
+			{
+				Materialize.toast(e.data, 5000);
+			}
+			else
+			{
+				Materialize.toast("ERROR! ##modelName## findOne failed", 5000);
+			}
     	});
     }
 
@@ -113,13 +120,20 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 			}
 			else
 			{
-				Materialize.toast("ERROR! ##modelName## #"+r.data.id+" delete failed", 5000);
+				Materialize.toast("ERROR! ##modelName## delete failed", 5000);
         		cb({});
 			}
     	},function(e){
     		log(e);
 			$rootScope.loading = false;
-			Materialize.toast("ERROR! ##modelName## #"+r.data.id+" delete failed", 5000);
+			if (e.statusText == "Forbidden")
+			{
+				Materialize.toast(e.data, 5000);
+			}
+			else
+			{
+				Materialize.toast("ERROR! ##modelName## delete failed", 5000);
+			}
     	});
 
     }
@@ -136,13 +150,20 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 			}
 			else
 			{
-				Materialize.toast("ERROR! ##modelName## #"+r.data.id+" create failed", 5000);
+				Materialize.toast("ERROR! ##modelName## create failed", 5000);
         		cb({});
 			}
     	},function(e){
     		log(e);
 			$rootScope.loading = false;
-			Materialize.toast("ERROR! ##modelName## #"+r.data.id+" create failed", 5000);
+			if (e.statusText == "Forbidden")
+			{
+				Materialize.toast(e.data, 5000);
+			}
+			else
+			{
+				Materialize.toast("ERROR! ##modelName## create failed", 5000);
+			}
     	});
     }
 
@@ -158,13 +179,20 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 			}
 			else
 			{
-				Materialize.toast("ERROR! ##modelName## #"+r.data.id+" save failed", 5000);
+				Materialize.toast("ERROR! ##modelName## save failed", 5000);
         		cb({});
 			}
     	},function(e){
     		log(e);
 			$rootScope.loading = false;
-			Materialize.toast("ERROR! ##modelName## #"+r.data.id+" save failed", 5000);
+			if (e.statusText == "Forbidden")
+			{
+				Materialize.toast(e.data, 5000);
+			}
+			else
+			{
+				Materialize.toast("ERROR! ##modelName## save failed", 5000);
+			}
     	});
     }
 
@@ -179,13 +207,20 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 			}
 			else
 			{
-				// Materialize.toast("ERROR! ##modelName## #"+r.data.id+" findAll failed", 5000);
+				// Materialize.toast("ERROR! ##modelName## findAll failed", 5000);
         		cb([]);
 			}
     	},function(e){
     		log(e);
 			$rootScope.loading = false;
-			Materialize.toast("ERROR! ##modelName## #"+r.data.id+" findAll failed", 5000);
+			if (e.statusText == "Forbidden")
+			{
+				Materialize.toast(e.data, 5000);
+			}
+			else
+			{
+				Materialize.toast("ERROR! ##modelName## findAll failed", 5000);
+			}
     	})
     }
 
@@ -200,13 +235,20 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 			}
 			else
 			{
-				Materialize.toast("ERROR! ##modelName## #"+r.data.id+" find failed", 5000);
+				Materialize.toast("ERROR! ##modelName## find failed", 5000);
         		cb({});
 			}
     	},function(e){
     		log(e);
 			$rootScope.loading = false;
-			Materialize.toast("ERROR! ##modelName## #"+r.data.id+" find failed", 5000);
+			if (e.statusText == "Forbidden")
+			{
+				Materialize.toast(e.data, 5000);
+			}
+			else
+			{
+				Materialize.toast("ERROR! ##modelName## find failed", 5000);
+			}
     	})
     }
 
@@ -231,13 +273,20 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 			}
 			else
 			{
-				Materialize.toast("ERROR! ##modelName## #"+r.data.id+" getSummary failed", 5000);
+				Materialize.toast("ERROR! ##modelName## getSummary failed", 5000);
         		cb([]);
 			}
     	},function(e){
     		log(e);
 			$rootScope.loading = false;
-			Materialize.toast("ERROR! ##modelName## #"+r.data.id+" getSummary failed", 5000);
+			if (e.statusText == "Forbidden")
+			{
+				Materialize.toast(e.data, 5000);
+			}
+			else
+			{
+				Materialize.toast("ERROR! ##modelName## getSummary failed", 5000);
+			}
     	})
     }
 
