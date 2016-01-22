@@ -5,48 +5,48 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 	
 	$routeprovider.when('/##modelName##', {
 		controller: '##modelName##Controller as ##modelNameAs##',
-		templateUrl: './views/##modelName##View.html'
+		templateUrl: './views/##modelName##/##modelName##View.html'
 	});
 
 	$routeprovider.when('/##modelName##/all', {
 		controller: '##modelName##Controller.findAll as ##modelNameAs##',
-		templateUrl: './views/##modelName##View.findAll.html'
+		templateUrl: './views/##modelName##/##modelName##View.findAll.html'
 	});
 
 	$routeprovider.when('/##modelName##/all/:searchText', {
 		controller: '##modelName##Controller.findAll as ##modelNameAs##',
-		templateUrl: './views/##modelName##View.findAll.html'
+		templateUrl: './views/##modelName##/##modelName##View.findAll.html'
 	});
 
 	$routeprovider.when('/##modelName##/all/:searchText/:pageId', {
 		controller: '##modelName##Controller.findAll as ##modelNameAs##',
-		templateUrl: './views/##modelName##View.findAll.html'
+		templateUrl: './views/##modelName##/##modelName##View.findAll.html'
 	});
 	
 	$routeprovider.when('/##modelName##/new', {
 		controller: '##modelName##Controller.new as ##modelNameAs##',
-		templateUrl: './views/##modelName##View.new.html'
+		templateUrl: './views/##modelName##/##modelName##View.new.html'
 	});
 
 	$routeprovider.when('/##modelName##/:##modelName##Id', {
 		controller: '##modelName##Controller.findOne as ##modelNameAs##',
-		templateUrl: './views/##modelName##View.findOne.html'
+		templateUrl: './views/##modelName##/##modelName##View.findOne.html'
 	});
 
 	$routeprovider.when('/##modelName##/:##modelName##Id/edit', {
 		controller: '##modelName##Controller.edit as ##modelNameAs##',
-		templateUrl: './views/##modelName##View.edit.html'
+		templateUrl: './views/##modelName##/##modelName##View.edit.html'
 	});
 
 	$routeprovider.when('/##modelName##/:##modelName##Id/delete', {
 		controller: '##modelName##Controller.delete as ##modelNameAs##',
-		templateUrl: './views/##modelName##View.delete.html'
+		templateUrl: './views/##modelName##/##modelName##View.delete.html'
 	});
 
 }])
 .directive("##modelName##Form", function() {
     return {
-        templateUrl : "views/directives/##modelName##Form.html"
+        templateUrl : "views/##modelName##/directives/##modelName##Form.html"
     };
 })
 .directive("##modelName##Record", function() {
@@ -54,17 +54,21 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
     	scope: {
     		##modelName## : "=##modelName##",
     		fnl : "=fnl",
-    		fnv : "=fnv"
+    		fnv : "=fnv",
+    		parentname : "=parentname",
+    		parentid : "=parentid"
     	},
-        templateUrl : "views/directives/##modelName##Record.html"
+        templateUrl : "views/##modelName##/directives/##modelName##Record.html"
     };
 })
 .directive("fk##modelName##EmbedRecord", function() {
     return {
     	scope: {
-    		##modelName## : "=##modelName##"
+    		##modelName## : "=##modelName##",
+    		parentname : "=parentname",
+    		parentid : "=parentid"
     	},
-        templateUrl : "views/directives/##modelName##RecordEmbed.html"
+        templateUrl : "views/##modelName##/directives/##modelName##RecordEmbed.html"
     };
 })
 .directive("fkm##modelName##MultipleEmbedRecord", function() {
@@ -73,9 +77,11 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
     		data : "=data",
     		labels : "=labels",
     		chart : "=chart",
-    		values : "=values"
+    		values : "=values",
+    		parentname : "=parentname",
+    		parentid : "=parentid"
     	},
-        templateUrl : "views/directives/##modelName##RecordMultipleEmbed.html"
+        templateUrl : "views/##modelName##/directives/##modelName##RecordMultipleEmbed.html"
     };
 })
 ##modelDirectives##
@@ -309,7 +315,7 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 .controller('##modelName##Controller.findOne', function($scope, $rootScope, $location, $http, $routeParams, ##modelName##Service) {
 
 	var self = this;
-
+	$scope.modelName = "##modelName##";
 	init();
 
 	function init(){
@@ -391,9 +397,10 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 	}
 
 })
-.controller('##modelName##Controller.new', function($scope, $rootScope, $location, $http, $routeParams, ##modelName##Service, fileUpload) {
+.controller('##modelName##Controller.new', function($scope, $rootScope, $location, $http, $routeParams, ##modelName##Service, fileUpload##modelServices##) {
 
 	var saved = false;
+	var redirectURL = "";
 
 	$scope.$on('$locationChangeStart', function( event ) {
 	    if (!saved)
@@ -456,6 +463,9 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 
 	function init(){
 
+
+##modelParams##
+
 	};
 
 	$scope.save = function(redirect)
@@ -465,7 +475,7 @@ angular.module('##appName##.##modelName##', ['ngRoute'])
 		{
 			##modelName##Service.create(self.obj,function(data){
 				saved = true;
-				$location.url('/##modelName##/' + data.id);
+				$location.url( redirectURL || ('/##modelName##/' + data.id) );
 				log(data);
 			});
 		}

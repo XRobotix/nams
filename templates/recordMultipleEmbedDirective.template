@@ -1,4 +1,9 @@
 <div class="row">
+  	<div class="col s12" ng-hide="chart">
+		<a href='#/##modelName##/new?{{parentname}}={{parentid}}'>ADD</a>
+	</div>
+</div>
+<div class="row">
   <div class="col s12" ng-hide="chart">
     ##recordEmbedMultipleView##
   </div>

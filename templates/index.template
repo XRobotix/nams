@@ -137,7 +137,6 @@
 
 
   <script>
-    io.sails.url = 'http://localhost:1337';
     if (require)
     {
       var ngui = require('nw.gui');

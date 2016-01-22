@@ -9,11 +9,11 @@
 			<ul>
 			  <li><a href="#/##modelName##/{{##modelNameAs##.##modelName##.id}}/delete" class="btn-floating red"><i class="material-icons">delete</i></a></li>
 			  <li><a href="#/##modelName##/{{##modelNameAs##.##modelName##.id}}/edit" class="btn-floating yellow darken-1"><i class="material-icons">edit</i></a></li>
-			  <li><a href="#/report/##modelName##/{{##modelNameAs##.##modelName##.id}}/generate" class="btn-floating yellow darken-1"><i class="mdi-action-open-with"></i></a></li>
+			  <li><a href="#/report/##modelName##/{{##modelNameAs##.##modelName##.id}}/generate" class="btn-floating blue darken-1"><i class="mdi-action-open-with"></i></a></li>
 			</ul>
 		</div>
 		<div class="container">
-			<div ##modelName##-record ##modelName##="##modelNameAs##.##modelName##" fnl="getChartLabels" fnv="getChartValues"></div>
+			<div ##modelName##-record ##modelName##="##modelNameAs##.##modelName##" fnl="getChartLabels" fnv="getChartValues" parentname="'##modelName##'" parentid="##modelNameAs##.##modelName##.id"></div>
 		</div>
 	</div>
 </div>

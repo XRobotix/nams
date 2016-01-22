@@ -1,0 +1,93 @@
+1. booking [1st consultation/consultation/opvolg][billed item]
+	naam
+	van 
+	id
+	epos - mark as mailed
+	tel
+	medical fund
+2. add PA num
+
+Add history
+
+-GP doc
+________________________________
+________________________________
+			TIMELINE
+________________________________
+________________________________
+
+	-prescription 
+	-sick letter
+	--notes
+	--checkin at reception
+	--booking made
+	--booking canceled
+
+
+	Consult begin
+	-----------------
+	-File uploads
+	-BMI
+	
+	-ref doc
+
+	DR go in --- 
+
+	-Referal
+	--order xray
+	--mr
+	--radi
+
+	-referal test results - multi upload
+	-----date
+	-----Supplier dropdown
+			--name
+			--type 
+				--blood
+				--radio
+				--
+	-----ordered TEXT
+	-----ref TEXT
+	-----BY TEXT
+	-----RESULT UPLOAD
+	-----Notes TEXTAREA
+
+	--photos
+	--audio
+
+	-consultation report
+	--report
+
+	-------end consult
+
+	-----------------
+
+
+	Surgery begin
+	-----------------
+	
+	-name
+	-doc (surgen)
+	-type
+	-hospital
+	-ref doc
+	-----date
+	--anethetist
+	--assisting dr
+	--auth code
+
+	--file uploads
+	--notes
+	--booking
+	--photos
+	--audio
+
+	-surgery report
+	--report
+
+	-------end consult
+________________________________
+________________________________
+		 TIMELINE END
+________________________________
+________________________________

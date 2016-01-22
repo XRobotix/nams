@@ -29,7 +29,7 @@ module.exports.policies = {
   UserController: {
    'login': ['log'],
     find: ['log','sessionAuth'],
-    create: ['log','sessionAuth','clearanceLevel5','create'],
+    create: ['log','create'],
     update: ['log','sessionAuth','clearanceLevel5'],
     destroy: ['log','sessionAuth','clearanceLevel5'],
     findOne: ['log','sessionAuth','clearanceLevel5']

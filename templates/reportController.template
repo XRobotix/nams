@@ -59,43 +59,43 @@ angular.module('##appName##.report', ['ngRoute'])
 	
 	$routeprovider.when('/report/all', {
 		controller: 'reportController as r',
-		templateUrl: './views/reportView.html'
+		templateUrl: './views/report/reportView.html'
 	});
 	
 	$routeprovider.when('/report/:model/:modelId/generate', {
 		controller: 'reportController.findAll as r',
-		templateUrl: './views/reportView.findAll.html'
+		templateUrl: './views/report/reportView.findAll.html'
 	});
 
 	$routeprovider.when('/report/:model', {
 		controller: 'reportController.findAll as r',
-		templateUrl: './views/reportView.findAll.html'
+		templateUrl: './views/report/reportView.findAll.html'
 	});
 
 	$routeprovider.when('/report/:model/new', {
 		controller: 'reportController.new as r',
-		templateUrl: './views/reportView.new.html'
+		templateUrl: './views/report/reportView.new.html'
 	});
 
 	$routeprovider.when('/report/:model/:reportId/edit', {
 		controller: 'reportController.edit as r',
-		templateUrl: './views/reportView.edit.html'
+		templateUrl: './views/report/reportView.edit.html'
 	});
 
 	$routeprovider.when('/report/:model/:reportId/delete', {
 		controller: 'reportController.delete as r',
-		templateUrl: './views/reportView.delete.html'
+		templateUrl: './views/report/reportView.delete.html'
 	});
 
 	for (var i = 0; i < models.length; i++) {	
 		$routeprovider.when('/report/'+models[i].name+'/:reportId', {
 			controller: models[i].name+'Controller.populateReport as r',
-			templateUrl: './views/'+models[i].name+'ReportView.findOne.html'
+			templateUrl: './views/'+models[i].name+'/'+models[i].name+'ReportView.findOne.html'
 		});
 
 		$routeprovider.when('/report/'+models[i].name+'/:reportId/:'+models[i].name+'Id', {
 			controller: models[i].name+'Controller.populateReport as r',
-			templateUrl: './views/'+models[i].name+'ReportView.findOne.html'
+			templateUrl: './views/'+models[i].name+'/'+models[i].name+'ReportView.findOne.html'
 		});
 	};
 

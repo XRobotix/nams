@@ -182,32 +182,35 @@ var generateLogin = function(appName)
 var generateReport = function(appName,models) 
 {
 
-	generateFromTempate("reportView","reportView.html","views",
+	try {fs.mkdirSync("./generated/"+appName+"/views/report");} catch (e){}
+	try {fs.mkdirSync("./generated/"+appName+"/views/report/directives");} catch (e){}
+
+	generateFromTempate("reportView","reportView.html","views/report",
 		[
 			{field:"appName",value:appName}
 		]);	
 
-	// generateFromTempate("reportView.findOne","reportView.findOne.html","views",
+	// generateFromTempate("reportView.findOne","reportView.findOne.html","views/report",
 	// 	[
 	// 		{field:"appName",value:appName}
 	// 	]);
 
-	generateFromTempate("reportView.findAll","reportView.findAll.html","views",
+	generateFromTempate("reportView.findAll","reportView.findAll.html","views/report",
 		[
 			{field:"appName",value:appName}
 		]);
 
-	generateFromTempate("reportView.edit","reportView.edit.html","views",
+	generateFromTempate("reportView.edit","reportView.edit.html","views/report",
 		[
 			{field:"appName",value:appName}
 		]);
 
-	generateFromTempate("reportView.new","reportView.new.html","views",
+	generateFromTempate("reportView.new","reportView.new.html","views/report",
 		[
 			{field:"appName",value:appName}
 		]);
 
-	generateFromTempate("reportView.delete","reportView.delete.html","views",
+	generateFromTempate("reportView.delete","reportView.delete.html","views/report",
 		[
 			{field:"appName",value:appName}
 		]);
@@ -218,7 +221,7 @@ var generateReport = function(appName,models)
 			{field:"config",value:JSON.stringify(models)}
 		]);
 	
-	generateFromTempate("reportView","reportView.html","views",[]);
+	generateFromTempate("reportView","reportView.html","views/report",[]);
 }
 
 var generateController = function(model)
@@ -227,6 +230,8 @@ var generateController = function(model)
 	var headings = [];
 	var modelDirectives = "";
 	var apiFields = "";
+	var modelServices = "";
+	var modelParams = "";
 
 	for (var i = 0; i < model.fields.length; i++) {
 		if (model.fields[i].top)
@@ -238,6 +243,13 @@ var generateController = function(model)
 		{
 			modelDirectives += generateFkDirective(model.fields[i].name,model.name);
 			apiFields += model.fields[i].name + ": {model: '" + upcase(model.fields[i].name) + "', via: '" + model.name + "'},\n";
+			modelServices += ","+model.fields[i].name+"Service";
+			modelParams += "if ($routeParams."+model.fields[i].name+") "+model.fields[i].name+"Service.findOne($routeParams."+model.fields[i].name+",function(data){\n\
+								// $scope.$apply(function(){\n\
+									self.obj."+model.fields[i].name+" = data;\n\
+									redirectURL = '"+model.fields[i].name+"/' + data.id;\n\
+								// });\n\
+							});\n\n";
 		}
 		if (model.fields[i].type == "file")
 		{
@@ -250,11 +262,16 @@ var generateController = function(model)
 		}
 	};
 
+	try {fs.mkdirSync("./generated/"+appName+"/views/"+model.name);} catch (e){}
+	try {fs.mkdirSync("./generated/"+appName+"/views/"+model.name+"/directives");} catch (e){}
+
 	generateFromTempate("controller",model.name+"Controller.js","controllers",
 		[
 			{field:"appName",value:appName},
 			{field:"modelName",value:model.name},
 			{field:"modelNameTitle",value:upcase(model.name)},
+			{field:"modelServices",value:modelServices},
+			{field:"modelParams",value:modelParams},
 			{field:"modelNameAs",value:model.name[0]}, 
 			{field:"modelHeadings",value:JSON.stringify(headings)},
 			{field:"modelDirectives",value:modelDirectives}
@@ -275,7 +292,7 @@ var generateController = function(model)
 			{field:"modelAttributes",value:apiFields}
 		]);
 	
-	generateFromTempate("view",model.name+"View.html","views",
+	generateFromTempate("view",model.name+"View.html","views/"+model.name,
 		[
 			{field:"appName",value:appName},
 			{field:"modelName",value:model.name},
@@ -283,7 +300,7 @@ var generateController = function(model)
 			{field:"modelNameAs",value:model.name[0]}
 		]);	
 
-	generateFromTempate("view.findOne",model.name+"View.findOne.html","views",
+	generateFromTempate("view.findOne",model.name+"View.findOne.html","views/"+model.name,
 		[
 			{field:"appName",value:appName},
 			{field:"modelName",value:model.name},
@@ -291,7 +308,7 @@ var generateController = function(model)
 			{field:"modelNameAs",value:model.name[0]}
 		]);
 
-	generateFromTempate("reportView.findOne",model.name+"ReportView.findOne.html","views",
+	generateFromTempate("reportView.findOne",model.name+"ReportView.findOne.html","views/"+model.name,
 		[
 			{field:"appName",value:appName},
 			{field:"modelName",value:model.name},
@@ -299,7 +316,7 @@ var generateController = function(model)
 			{field:"modelNameAs",value:model.name[0]}
 		]);
 
-	generateFromTempate("view.findAll",model.name+"View.findAll.html","views",
+	generateFromTempate("view.findAll",model.name+"View.findAll.html","views/"+model.name,
 		[
 			{field:"appName",value:appName},
 			{field:"modelName",value:model.name},
@@ -307,7 +324,7 @@ var generateController = function(model)
 			{field:"modelNameAs",value:model.name[0]}
 		]);
 
-	generateFromTempate("view.edit",model.name+"View.edit.html","views",
+	generateFromTempate("view.edit",model.name+"View.edit.html","views/"+model.name,
 		[
 			{field:"appName",value:appName},
 			{field:"modelName",value:model.name},
@@ -315,7 +332,7 @@ var generateController = function(model)
 			{field:"modelNameAs",value:model.name[0]}
 		]);
 
-	generateFromTempate("view.new",model.name+"View.new.html","views",
+	generateFromTempate("view.new",model.name+"View.new.html","views/"+model.name,
 		[
 			{field:"appName",value:appName},
 			{field:"modelName",value:model.name},
@@ -323,7 +340,7 @@ var generateController = function(model)
 			{field:"modelNameAs",value:model.name[0]}
 		]);
 
-	generateFromTempate("view.delete",model.name+"View.delete.html","views",
+	generateFromTempate("view.delete",model.name+"View.delete.html","views/"+model.name,
 		[
 			{field:"appName",value:appName},
 			{field:"modelName",value:model.name},
@@ -357,23 +374,23 @@ var generateForm = function(model)
 			 switch(groups[key][i].type) {
 			    case "text":
 			        formData += "<input id='"+groups[key][i].name+"' ng-model='" + model.name[0] +  ".obj." + groups[key][i].name + "' type='text' >\n";
-					formData += "<label for='"+groups[key][i].name+"'>"+groups[key][i].name+"</label> \n </input-field>"
+					formData += "<label for='"+groups[key][i].name+"'>"+(groups[key][i].displayName||groups[key][i].name)+"</label> \n </input-field>"
 			        break;
 			    case "email":
 			        formData += "<input id='"+groups[key][i].name+"' ng-model='" + model.name[0] +  ".obj." + groups[key][i].name + "' type='email'  class='validate'>\n";
-					formData += "<label for='"+groups[key][i].name+"'>"+groups[key][i].name+"</label> \n </input-field>"
+					formData += "<label for='"+groups[key][i].name+"'>"+(groups[key][i].displayName||groups[key][i].name)+"</label> \n </input-field>"
 			        break;
 			    case "textarea":
 			        formData += "<textarea id='"+groups[key][i].name+"' ng-model='" + model.name[0] +  ".obj." + groups[key][i].name + "' class='materialize-textarea'></textarea>\n";
-					formData += "<label for='"+groups[key][i].name+"'>"+groups[key][i].name+"</label> \n </input-field>"
+					formData += "<label for='"+groups[key][i].name+"'>"+(groups[key][i].displayName||groups[key][i].name)+"</label> \n </input-field>"
 			        break;
 			    case "calculated":
 			        formData += "<input id='"+groups[key][i].name+"' ng-change='" + generateCalculatedFn(model.name[0] +  ".obj.",groups[key][i].fn) + "' ng-model='" + model.name[0] +  ".obj." + groups[key][i].name + "' type='text'>\n";
-					formData += "<label for='"+groups[key][i].name+"'>"+groups[key][i].name+"</label> \n </input-field>"
+					formData += "<label for='"+groups[key][i].name+"'>"+(groups[key][i].displayName||groups[key][i].name)+"</label> \n </input-field>"
 			        break;
 			    case "result":
 			        formData += "<input id='"+groups[key][i].name+"' ng-model='" + model.name[0] +  ".obj." + groups[key][i].name + "' type='text' disabled>\n";
-					formData += "<label for='"+groups[key][i].name+"'>"+groups[key][i].name+"</label> \n </input-field>"
+					formData += "<label for='"+groups[key][i].name+"'>"+(groups[key][i].displayName||groups[key][i].name)+"</label> \n </input-field>"
 			        break;
 			    case "img":
 			        formData += "<div class='row'>\n";
@@ -387,7 +404,7 @@ var generateForm = function(model)
 					formData += "</div></input-field>\n";
 			        break;
 			    case "camera":
-			    	formData += "<label class='active'>"+groups[key][i].name+"</label>";
+			    	formData += "<label class='active'>"+(groups[key][i].displayName||groups[key][i].name)+"</label>";
 			        formData += "<ng-camera\n\
 								    capture-message='Cheeeese!'\n\
 								    countdown='3'\n\
@@ -402,7 +419,7 @@ var generateForm = function(model)
 								></ng-camera></input-field>\n";
 			        break;
 			    case "audio":
-			    	formData += "<label style='position: inherit;'>"+groups[key][i].name+"</label>";
+			    	formData += "<label style='position: inherit;'>"+(groups[key][i].displayName||groups[key][i].name)+"</label>";
 			        formData += "<ng-audio-recorder' id='audioInput' audio-model='"+ model.name[0] +  ".obj." + groups[key][i].name+"'>\n\
 								  <!-- Start controls, exposed via recorder-->\n\
 								  <div ng-if='recorder.isAvailable'>\n\
@@ -444,30 +461,30 @@ var generateForm = function(model)
 			        break;
 			    case "date":
 			        formData += "<input type='date' id='"+groups[key][i].name+"' ng-model='" + model.name[0] +  ".obj." + groups[key][i].name + "'>\n";
-					formData += "<label class='active' for='"+groups[key][i].name+"'>"+groups[key][i].name+"</label> \n </input-field>";
+					formData += "<label class='active' for='"+groups[key][i].name+"'>"+(groups[key][i].displayName||groups[key][i].name)+"</label> \n </input-field>";
 			        break;
 			    case "range":
 			        formData += "<div style='margin-top:50px;' class='range-field' ng-init='" + model.name[0] +  ".obj." + groups[key][i].name + " = " + model.name[0] +  ".obj." + groups[key][i].name + "||0'><input id='"+groups[key][i].name+"' ng-model='" + model.name[0] +  ".obj." + groups[key][i].name + "' type='range' min='"+groups[key][i].min+"' max='"+groups[key][i].max+"' ></div>\n";
-					formData += "<label class='active' for='"+groups[key][i].name+"'>"+groups[key][i].name+"</label> \n </input-field>"
+					formData += "<label class='active' for='"+groups[key][i].name+"'>"+(groups[key][i].displayName||groups[key][i].name)+"</label> \n </input-field>"
 			        break;
 			    case "boolean":
 			        formData += "<input id='"+groups[key][i].name+"' ng-model='" + model.name[0] +  ".obj." + groups[key][i].name + "' type='checkbox'>\n";
-					formData += "<label for='"+groups[key][i].name+"'>"+groups[key][i].name+"</label> \n </input-field>"
+					formData += "<label for='"+groups[key][i].name+"'>"+(groups[key][i].displayName||groups[key][i].name)+"</label> \n </input-field>"
 			        break;
 			    case "fk":
 			        formData += generateFkForm(groups[key][i].name,model.name,groups[key][i].inlineCreate);
-					formData += "<label class='active' for='"+groups[key][i].name+"'>"+groups[key][i].name+"</label> \n </input-field>"
+					formData += "<label class='active' for='"+groups[key][i].name+"'>"+(groups[key][i].displayName||groups[key][i].name)+"</label> \n </input-field>"
 			        break;
 			    case "number":
 			        formData += "<input id='"+groups[key][i].name+"' ng-model='" + model.name[0] +  ".obj." + groups[key][i].name + "' type='number' >\n";;
-					formData += "<label for='"+groups[key][i].name+"'>"+groups[key][i].name+"</label> \n </input-field>"
+					formData += "<label for='"+groups[key][i].name+"'>"+(groups[key][i].displayName||groups[key][i].name)+"</label> \n </input-field>"
 			        break;
 			    case "multiple":
 			        formData += generateMultipleForm(groups[key][i].name,model.name,groups[key][i].inlineCreate);
-					formData += "<label class='active' for='"+groups[key][i].name+"'>"+groups[key][i].name+"</label> \n </input-field>"
+					formData += "<label class='active' for='"+groups[key][i].name+"'>"+(groups[key][i].displayName||groups[key][i].name)+"</label> \n </input-field>"
 			        break;
 			    case "radio":
-			        formData += "<label style='position: inherit;' for='"+groups[key][i].name+"'>"+groups[key][i].name+"</label><div class='row' id='"+groups[key][i].name+"'>\n";
+			        formData += "<label style='position: inherit;' for='"+groups[key][i].name+"'>"+(groups[key][i].displayName||groups[key][i].name)+"</label><div class='row' id='"+groups[key][i].name+"'>\n";
 			    	for (var option in groups[key][i].options) {
 			        	formData += "<div class='col s2'>\n";
 						formData += "<input type='radio' name='"+groups[key][i].name+"' ng-model='" + model.name[0] +  ".obj." + groups[key][i].name  + "."+options+ "' id='"+groups[key][i].name+"-"+option+"' /><label for='"+groups[key][i].name+"-"+option+"'>" + groups[key][i].options[option] + "</label>\n";
@@ -479,7 +496,7 @@ var generateForm = function(model)
 			    	if (groups[key][i].multiple)
 			    	{
 			        	// formData += "<select class='browser-default' multiple style='' ng-model='" + model.name[0] +  ".obj." + groups[key][i].name + "' material-select >\n"
-					        formData += "<label style='position: inherit;' for='"+groups[key][i].name+"'>"+groups[key][i].name+"</label><div class='row' id='"+groups[key][i].name+"' ng-init='" + model.name[0] +  ".obj." + groups[key][i].name + "=" + model.name[0] +  ".obj." + groups[key][i].name + "||{}'>\n";
+					        formData += "<label style='position: inherit;' for='"+groups[key][i].name+"'>"+(groups[key][i].displayName||groups[key][i].name)+"</label><div class='row' id='"+groups[key][i].name+"' ng-init='" + model.name[0] +  ".obj." + groups[key][i].name + "=" + model.name[0] +  ".obj." + groups[key][i].name + "||{}'>\n";
 					    	for (var option in groups[key][i].options) {
 					        	formData += "<div class='col s3'>\n";
 								formData += "<input type='checkbox' ng-model='" + model.name[0] +  ".obj." + groups[key][i].name + "."+option+"' id='"+groups[key][i].name+"-"+option+"' /><label for='"+groups[key][i].name+"-"+option+"'>" + groups[key][i].options[option] + "</label>\n";
@@ -508,7 +525,7 @@ var generateForm = function(model)
 
     };
 
-	generateFromTempate("form",model.name+"Form.html","views/directives",
+	generateFromTempate("form",model.name+"Form.html","views/"+model.name+"/directives",
 		[
 			{field:"appName",value:appName},
 			{field:"modelName",value:model.name},
@@ -520,7 +537,7 @@ var generateForm = function(model)
 
 var generateMultipleForm = function(model,name,create)
 {
-	generateFromTempate("multipleDirective","multiple" + model + "" + name + "Directive.html","views/directives",
+	generateFromTempate("multipleDirective","multiple" + model + "" + name + "Directive.html","views/"+name+"/directives",
 		[
 			{field:"appName",value:appName},
 			{field:"modelName",value:model}
@@ -531,7 +548,7 @@ var generateMultipleForm = function(model,name,create)
 
 var generateFkForm = function(model,name,create)
 {
-	generateFromTempate("fkDirective","fk" + model + "" + name + "Directive.html","views/directives",
+	generateFromTempate("fkDirective","fk" + model + "" + name + "Directive.html","views/"+name+"/directives",
 		[
 			{field:"appName",value:appName},
 			{field:"modelName",value:model},
@@ -639,10 +656,10 @@ var generateRecordView = function(model,headings)
 		  			if (groups[key][i].chart)
 		  			{
 		  				console.log(groups[key][i].name,groups[key][i].chart)
-		  				res += "<div fkm" +groups[key][i].name+"-multiple-embed-record data='" + model.name + "." + groups[key][i].name + "' chart='true' labels='fnl(" + model.name + "." + groups[key][i].name + ",\"" + groups[key][i].chart.label + "\")' values='fnv(" + model.name + "." + groups[key][i].name + ",\"" + groups[key][i].chart.value + "\")'></div>\n";
+		  				res += "<div fkm" +groups[key][i].name+"-multiple-embed-record data='" + model.name + "." + groups[key][i].name + "' chart='true' labels='fnl(" + model.name + "." + groups[key][i].name + ",\"" + groups[key][i].chart.label + "\")' values='fnv(" + model.name + "." + groups[key][i].name + ",\"" + groups[key][i].chart.value + "\")' parentid='parentid' parentname='parentname'></div>\n";
 		  			}
 		  			else
-		  				res += "<div fkm" +groups[key][i].name+"-multiple-embed-record data='" + model.name + "." + groups[key][i].name + "'></div>\n";
+		  				res += "<div fkm" +groups[key][i].name+"-multiple-embed-record data='" + model.name + "." + groups[key][i].name + "' parentid='parentid' parentname='parentname'></div>\n";
 			        break;
 			    case "radio":
 		  			res += "<p><b>" + groups[key][i].name + "</b>: {{" + model.name + "." + groups[key][i].name + "}}</p>\n";
@@ -674,14 +691,14 @@ var generateRecordView = function(model,headings)
     }
 	resE += "</ul>";
 
-	generateFromTempate("recordDirective",model.name + "Record.html","views/directives",
+	generateFromTempate("recordDirective",model.name + "Record.html","views/"+model.name+"/directives",
 	[
 		{field:"recordView",value:res},
 		{field:"modelName",value:model.name},
 		{field:"modelNameTitle",value:upcase(model.name)},
 		{field:"modelNameAs",value:model.name[0]}
 	]);
-	generateFromTempate("recordEmbedDirective",model.name + "RecordEmbed.html","views/directives",
+	generateFromTempate("recordEmbedDirective",model.name + "RecordEmbed.html","views/"+model.name+"/directives",
 	[
 		{field:"recordEmbedView",value:resE},
 		{field:"modelName",value:model.name},
@@ -689,7 +706,7 @@ var generateRecordView = function(model,headings)
 		{field:"modelNameAs",value:model.name[0]}
 	]);
 
-	generateFromTempate("recordMultipleEmbedDirective",model.name + "RecordMultipleEmbed.html","views/directives",
+	generateFromTempate("recordMultipleEmbedDirective",model.name + "RecordMultipleEmbed.html","views/"+model.name+"/directives",
 	[
 		{field:"recordEmbedMultipleView",value:resME},
 		{field:"modelName",value:model.name},
@@ -713,7 +730,7 @@ var generateMultipleDirective = function(model,name)
 			            'save' : '=save',\n\
 			            'selected' : '=selected'\n\
 			        },\n\
-			        templateUrl : 'views/directives/multiple" + model + "" + name + "Directive.html'//,\n\
+			        templateUrl : 'views/"+name+"/directives/multiple" + model + "" + name + "Directive.html'//,\n\
 			        //link: function($scope, elem, attr, ctrl) {\n\
 			        //    console.debug($scope);\n\
 			        //    var textField = $('input', elem).attr('ng-model', 'result');\n\
@@ -742,7 +759,7 @@ var generateFkDirective = function(model,name)
 			        'save' : '=save',\n\
 		            'selected' : '=selected'\n\
 		        },\n\
-		        templateUrl : 'views/directives/fk" + model + "" + name + "Directive.html',\n\
+		        templateUrl : 'views/"+name+"/directives/fk" + model + "" + name + "Directive.html',\n\
 		        link: function($scope, elem, attr, ctrl) {\n\
 		            console.debug($scope);\n\
 		            var textField = $('input', elem).attr('ng-model', 'result');\n\
