@@ -30,6 +30,7 @@
     "angularPrint": "angular-print#~0.3.8",
     "jspdf": "~1.1.135",
     "angularAudioRecorder": "~1.4.1",
-    "ng-camera": "~0.1.3"
+    "ng-camera": "~0.1.3",
+    "angular-material": "~1.0.3"
   }
 }
